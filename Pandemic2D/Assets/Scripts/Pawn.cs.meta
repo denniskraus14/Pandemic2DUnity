@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: ec5e7378485c7c14b997e24b18271187
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - controller: {instanceID: 0}
+  - Dispatcher: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}
+  - Medic: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}
+  - Researcher: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}
+  - Scientist: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}
+  - QuarantineSpecialist: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f,
+      type: 3}
+  - ContingencyPlanner: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f,
+      type: 3}
+  - OperationsExpert: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

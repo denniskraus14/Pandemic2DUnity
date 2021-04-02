@@ -3,7 +3,12 @@ guid: 2e61b6a3cccf227478ef409bb4fa876d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - controller: {instanceID: 0}
+  - red_city: {fileID: 21300000, guid: 5f9c172d1ea73f44ab773a849ff201d6, type: 3}
+  - blue_city: {fileID: 21300000, guid: 085b9f94a7894534cb5a7246fb7b87df, type: 3}
+  - yellow_city: {fileID: 21300000, guid: db212c3e9e7917442ae0c72e8dc77f39, type: 3}
+  - black_city: {fileID: 21300000, guid: 50e4868b922019344beac9014de165a7, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
