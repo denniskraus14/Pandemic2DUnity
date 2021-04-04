@@ -12,13 +12,13 @@ using System.Threading;
 public class Game : MonoBehaviour
 {
     public GameObject pawn;
-    public GameObject testcity;
+    public GameObject city;
 
 
     public static int turn = 1;
     public List<GameObject> pawns; //replacing players
     public List<GameObject> diseases; //replacing diseases - make a disease class
-    public Dictionary<string,City> cities; //replacing cities
+    public Dictionary<string,City> cities = new Dictionary<string, City>(); //replacing cities
 
     private GameObject currentPlayer;
 
@@ -30,7 +30,7 @@ public class Game : MonoBehaviour
     {
         //scene that asks for how many players
         //scene that asks to choose roles/ randomize roles
-        //InitializeCities();
+        InitializeCities();
         int n = 4; //assume 4 for now
         List<string> names = new List<string>() { "Dennis","Dad","Gram","Oreo","Dhhyey","Jessie","Eric","Claus","Claus's Wife"};
         List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert "};
@@ -59,8 +59,8 @@ public class Game : MonoBehaviour
         }
         currentPlayer = pawns[turn - 1];
 }
-    /*
-    public static void InitializeCities()
+    
+    public void InitializeCities()
     {
         List<string> citynames = new List<string>() {
         "Atlanta","Chicago","Montreal","San Francisco","New York","Madrid","London","Essen","Paris","Milan","St. Petersburg","Washington",
@@ -76,12 +76,12 @@ public class Game : MonoBehaviour
             4679000,
             17311000,22547000,3785000,8338000,8314000,7106000,20767000,2871000,26063000,13189000,
             8702000,13639000,4887000,9046000,6015000,20186000,11547000,9121000,19463000,
-            5582000,3888000, 14900000
+            5582000,3888000, 14900000,0,0
         };
-        string[] colors = new string[] {"black","blue","red","yellow" };
-        for(int i = 0; i < 4; i++)
+        List<string> colors = new List<string> {"black","blue","red","yellow" };
+        for(int i = 0; i <= 3; i++)
         {
-            for(int j = 0; j < 12; j++)
+            for(int j = 0; j <= 11; j++)
             {
                 Dictionary<string, int> acc = new Dictionary<string, int>();
                 acc.Add("black", 0);
@@ -92,7 +92,7 @@ public class Game : MonoBehaviour
                 cities.Add(citynames[i*12+j],temp.GetComponent<City>());
             }
         }
-    }*/
+    }
 
     public GameObject Create(string name, string role, int x, int y)
     {
@@ -109,10 +109,10 @@ public class Game : MonoBehaviour
         p.Activate();
         return obj;
     }
-    /*
-    public static GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y)
+    
+    public GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y)
     {
-        GameObject obj = Instantiate(testcity, new Vector3(0, 0, -2), Quaternion.identity);
+        GameObject obj = Instantiate(city, new Vector3(0, 0, -2), Quaternion.identity);
         City c = obj.GetComponent<City>();
         c.setName(name);
         c.setColor(color);
@@ -122,9 +122,9 @@ public class Game : MonoBehaviour
         c.setPopulation(pop);
         c.SetXBoard(x);
         c.SetYBoard(y);
-        c.Activate();
+        c.Activate(name);
         return obj;
-    }*/
+    }
 
     public void SetPosition(GameObject obj)
     {

@@ -329,6 +329,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pawn: {fileID: 2760558533714810909, guid: 75de4b5c198a9bc458fda0276b5eba73, type: 3}
-  testcity: {fileID: 0}
+  city: {fileID: 274286607533099521, guid: a4ad0c1d65a75ff459f8d6125fea88b7, type: 3}
   pawns: []
   diseases: []

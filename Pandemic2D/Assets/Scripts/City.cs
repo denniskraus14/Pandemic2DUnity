@@ -69,12 +69,12 @@ public class City : MonoBehaviour
         population = p;
     }
 
-    public void Activate()
+    public void Activate(string name)
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
         //take the instantiated location and adjust the transform
         SetCoords(); //everyone would start in atlanta
-
+        this.name = name;
         switch (this.color)
         {
             case "black": this.GetComponent<SpriteRenderer>().sprite = black_city; break;
