@@ -5,6 +5,7 @@ using System;
 using UnityEngine.SceneManagement;
 using System.Linq;
 using UnityEngine.UI;
+using System.Threading;
 
 
 
@@ -34,13 +35,25 @@ public class Game : MonoBehaviour
         List<string> names = new List<string>() { "Dennis","Dad","Gram","Oreo","Dhhyey","Jessie","Eric","Claus","Claus's Wife"};
         List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert "};
         //set all piece positions on the board (Atlanta)
+        var random = new System.Random();
         for (int i = 1; i <=n; i++)
         {
             //create the pawn object
-            var random = new System.Random();
             int random1 = random.Next(names.Count);
             int random2 = random.Next(roles.Count);
             GameObject temp = Create(names[random1], roles[random2],0,0); //figure out the location of atlanta
+            names.Remove(names[random1]);
+            roles.Remove(roles[random2]);
+            string role = temp.GetComponent<Pawn>().getRole();
+            switch(role){
+                case "Dispatcher":temp.GetComponent<SpriteRenderer>().color = new Color(.62f,.196f,.745f,1.0f);break;
+                case "Medic":temp.GetComponent<SpriteRenderer>().color = new Color(1.0f,.556f,0.0f,1.0f);break;
+                case "Scientist": break;
+                case "Researcher": temp.GetComponent<SpriteRenderer>().color = new Color(.38f,.227f,.035f,1.0f); break;
+                case "QuarantineSpecialist": temp.GetComponent<SpriteRenderer>().color = new Color(.067f,.341f,.035f,1.0f); break;
+                case "ContingencyPlanner": temp.GetComponent<SpriteRenderer>().color = new Color(.13f,.52f,.79f,1.0f); break;
+                case "OperationsExpert": temp.GetComponent<SpriteRenderer>().color = new Color(.286f,.87f,.35f,1.0f); break;
+            }
             pawns.Add(temp);
             SetPosition(temp); //make the pawn show up
         }
@@ -83,7 +96,9 @@ public class Game : MonoBehaviour
 
     public GameObject Create(string name, string role, int x, int y)
     {
-        GameObject obj = Instantiate(pawn, new Vector3(0, 0, -2), Quaternion.identity);
+        Thread.Sleep(1);//ensures at least 1 millisecond has passed
+        var random = new System.Random(DateTime.Now.Millisecond);
+        GameObject obj = Instantiate(pawn, new Vector3(random.Next(-442,-412), random.Next(85,115), -2), Quaternion.identity);
         Pawn p = obj.GetComponent<Pawn>();
         p.setName(name);
         p.setRole(role);
