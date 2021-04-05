@@ -17,7 +17,7 @@ public class Pawn : MonoBehaviour
     //refs for all the sprites of chess pieces
     public Sprite Dispatcher, Medic, Researcher, Scientist, QuarantineSpecialist, ContingencyPlanner, OperationsExpert;
     
-    private string location; //you changed this to string to get past an error
+    private City location; //you changed this to string to get past an error
     private string role;
     private string name;
     private City[] cards;
@@ -55,22 +55,22 @@ public class Pawn : MonoBehaviour
         this.transform.position = new Vector3(x, y, -2.0f);*/
     }
 
-    public int GetXBoard()
+    public int getXBoard()
     {
         return xBoard;
     }
 
-    public int GetYBoard()
+    public int getYBoard()
     {
         return yBoard;
     }
 
-    public void SetXBoard(int x)
+    public void setXBoard(int x)
     {
         xBoard = x;
     }
 
-    public void SetYBoard(int y)
+    public void setYBoard(int y)
     {
         yBoard = y;
     }
@@ -80,7 +80,7 @@ public class Pawn : MonoBehaviour
     
     }
 
-    public string getLocation()
+    public City getLocation()
     {
         return location;
     }
@@ -100,7 +100,7 @@ public class Pawn : MonoBehaviour
     {
         name = n;
     }
-    public void setLocation(string c)
+    public void setLocation(City c)
     {
         location = c;
     }

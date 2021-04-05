@@ -24,6 +24,31 @@ public class Game : MonoBehaviour
 
     private bool gameOver = false;
 
+    private List<GameObject> getPawns()
+    {
+        return pawns;
+    }
+    private void setPawns(List<GameObject> ps)
+    {
+        pawns = ps;
+    }
+    private List<GameObject> getDiseases()
+    {
+        return diseases;
+    }
+    private void setDiseases(List<GameObject> ds)
+    {
+        diseases = ds;
+    }
+    private Dictionary<string, City> getCities()
+    {
+        return cities;
+    }
+    private void setCities(Dictionary<string,City> cs)
+    {
+        cities = cs;
+    }
+    
 
     // Start is called before the first frame update
     public void Start()
@@ -41,7 +66,7 @@ public class Game : MonoBehaviour
             //create the pawn object
             int random1 = random.Next(names.Count);
             int random2 = random.Next(roles.Count);
-            GameObject temp = Create(names[random1], roles[random2],0,0); //figure out the location of atlanta
+            GameObject temp = Create(names[random1], roles[random2]);
             names.Remove(names[random1]);
             roles.Remove(roles[random2]);
             string role = temp.GetComponent<Pawn>().getRole();
@@ -78,7 +103,17 @@ public class Game : MonoBehaviour
             8702000,13639000,4887000,9046000,6015000,20186000,11547000,9121000,19463000,
             5582000,3888000, 14900000,0,0
         };
-        List<string> colors = new List<string> {"black","blue","red","yellow" };
+        List<Tuple<int, int>> locations = new List<Tuple<int, int>>() {
+        new Tuple<int,int>(-445,100),new Tuple<int,int>(0,0), new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
+        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
+        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
+        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
+        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
+        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
+        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
+        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0) };
+
+        List<string> colors = new List<string> {"blue", "yellow" , "black","red"};
         for(int i = 0; i <= 3; i++)
         {
             for(int j = 0; j <= 11; j++)
@@ -88,31 +123,43 @@ public class Game : MonoBehaviour
                 acc.Add("blue", 0);
                 acc.Add("red", 0);
                 acc.Add("yellow", 0);
-                GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc,false,false, populations[i * 12 + j],0,0);//fix xboard yboard
-                cities.Add(citynames[i*12+j],temp.GetComponent<City>());
+                if (citynames[i*12+j].Equals("Atlanta")){
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
+                }
+                else
+                {
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
+                }
             }
         }
     }
 
-    public GameObject Create(string name, string role, int x, int y)
+    public GameObject Create(string name, string role)
     {
         Thread.Sleep(1);//ensures at least 1 millisecond has passed
         var random = new System.Random(DateTime.Now.Millisecond);
-        GameObject obj = Instantiate(pawn, new Vector3(random.Next(-442,-412), random.Next(85,115), -2), Quaternion.identity);
+        int xBoard = random.Next(-442, -412);
+        int yBoard = random.Next(85, 115);
+        //Dictionary<string, City> cities = getCities();
+        GameObject obj = Instantiate(pawn, new Vector3(xBoard, yBoard, -2), Quaternion.identity);
         Pawn p = obj.GetComponent<Pawn>();
         p.setName(name);
         p.setRole(role);
-        p.setLocation("Atlanta");
+        p.setLocation(cities["Atlanta"]);
+        cities["Atlanta"].getPlayers().Add(p);
+        //cities["Atlanta"].setPlayers(temp);
         p.setCards(null); //fix this later
-        p.SetXBoard(x);
-        p.SetYBoard(y);
+        p.setXBoard(xBoard);
+        p.setYBoard(yBoard);
         p.Activate();
         return obj;
     }
     
     public GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y)
     {
-        GameObject obj = Instantiate(city, new Vector3(0, 0, -2), Quaternion.identity);
+        GameObject obj = Instantiate(city, new Vector3(x, y, -2), Quaternion.identity);
         City c = obj.GetComponent<City>();
         c.setName(name);
         c.setColor(color);
@@ -120,8 +167,9 @@ public class Game : MonoBehaviour
         c.setQuarantined(q); //fix this later
         c.setResearchStation(rs);
         c.setPopulation(pop);
-        c.SetXBoard(x);
-        c.SetYBoard(y);
+        c.setXBoard(x);
+        c.setYBoard(y);
+        c.setPlayers(new List<Pawn>()); //set city to have no players in it initially
         c.Activate(name);
         return obj;
     }
@@ -130,6 +178,37 @@ public class Game : MonoBehaviour
     {
         Pawn p = obj.GetComponent<Pawn>();
         pawns.Add(obj);
+        Arrange(p.getLocation());//arrange the pawns around a city nicely
+    }
+
+    
+    public void Arrange(City c)
+    {
+        List<Pawn> ps = c.getPlayers();
+        int x = c.getXBoard();
+        int y = c.getYBoard();
+        int n = ps.Count;
+        switch (n)
+        {
+            case 1:
+                ps[0].transform.position = new Vector3(c.getXBoard(), c.getYBoard(), -2.0f);
+            case 2:
+                ps[0].transform.position = new Vector3(c.getXBoard() - 20,c.getYBoard(), -2.0f);
+                ps[1].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard(), -2.0f); //change xboard and yboard for pawns?
+                break;
+            case 3:
+                ps[0].transform.position = new Vector3(c.getXBoard() - 20, c.getYBoard(), -2.0f);
+                ps[1].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard(), -2.0f);
+                ps[2].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard() + 35, -2.0f);
+                break;
+            case 4:
+                ps[0].transform.position = new Vector3(c.getXBoard() - 20, c.getYBoard(), -2.0f);
+                ps[1].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard(), -2.0f);
+                ps[2].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard() + 35, -2.0f);
+                ps[3].transform.position = new Vector3(c.getXBoard() - 20, c.getYBoard() + 35, -2.0f);
+                break;
+        }
+        
     }
 
     public GameObject GetCurrentPlayer()

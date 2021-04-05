@@ -17,6 +17,7 @@ public class City : MonoBehaviour
     private bool quarantined = false;
     private bool research_station = false;
     private int population;
+    private List<Pawn> players;
 
     public Sprite red_city, blue_city, yellow_city, black_city;
 
@@ -68,6 +69,15 @@ public class City : MonoBehaviour
     {
         population = p;
     }
+    public void setPlayers(List<Pawn> ps)
+    {
+        players = ps;
+    }
+
+    public List<Pawn> getPlayers()
+    {
+        return players;
+    }
 
     public void Activate(string name)
     {
@@ -99,22 +109,22 @@ public class City : MonoBehaviour
         this.transform.position = new Vector3(x, y, -2.0f);*/
     }
 
-    public int GetXBoard()
+    public int getXBoard()
     {
         return xBoard;
     }
 
-    public int GetYBoard()
+    public int getYBoard()
     {
         return yBoard;
     }
 
-    public void SetXBoard(int x)
+    public void setXBoard(int x)
     {
         xBoard = x;
     }
 
-    public void SetYBoard(int y)
+    public void setYBoard(int y)
     {
         yBoard = y;
     }
