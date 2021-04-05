@@ -58,7 +58,7 @@ public class Game : MonoBehaviour
         InitializeCities();
         int n = 4; //assume 4 for now
         List<string> names = new List<string>() { "Dennis","Dad","Gram","Oreo","Dhhyey","Jessie","Eric","Claus","Claus's Wife"};
-        List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert "};
+        List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert"};
         //set all piece positions on the board (Atlanta)
         var random = new System.Random();
         for (int i = 1; i <=n; i++)
@@ -76,7 +76,7 @@ public class Game : MonoBehaviour
                 case "Scientist": break;
                 case "Researcher": temp.GetComponent<SpriteRenderer>().color = new Color(.38f,.227f,.035f,1.0f); break;
                 case "QuarantineSpecialist": temp.GetComponent<SpriteRenderer>().color = new Color(.067f,.341f,.035f,1.0f); break;
-                case "ContingencyPlanner": temp.GetComponent<SpriteRenderer>().color = new Color(.13f,.52f,.79f,1.0f); break;
+                case "ContingencyPlanner": temp.GetComponent<SpriteRenderer>().color = new Color(.05f,.52f,.79f,1.0f); break;
                 case "OperationsExpert": temp.GetComponent<SpriteRenderer>().color = new Color(.286f,.87f,.35f,1.0f); break;
             }
             pawns.Add(temp);
@@ -91,7 +91,7 @@ public class Game : MonoBehaviour
         "Atlanta","Chicago","Montreal","San Francisco","New York","Madrid","London","Essen","Paris","Milan","St. Petersburg","Washington",
         "Miami", "Los Angeles","Mexico City","Bogota","Sao Paolo","Lima","Santiago","Buenos Aires","Lagos","Kinshasa","Khartoum","Johannesburg",
         "Algiers","Istanbul","Moscow","Tehran","Baghdad","Riyadh","Karachi","Delhi","Mumbai","Cairo","Chennai","Kolkatta",
-        "Sydney","Manilla","Jakarta","Ho Chi Minh City","Hong Kong","Bangkok","Taipei","Osaka","Beijing","Seoul","Tokyo","Shanghai"
+        "Sydney","Manilla","Jakarta","Ho Chi Minh City","Hong Kong","Bangkok","Taipei","Osaka","Beijing","Seoul","Tokyo","Shanghai" 
         };
 
         List<int> populations = new List<int>(){
@@ -104,14 +104,14 @@ public class Game : MonoBehaviour
             5582000,3888000, 14900000,0,0
         };
         List<Tuple<int, int>> locations = new List<Tuple<int, int>>() {
-        new Tuple<int,int>(-445,100),new Tuple<int,int>(0,0), new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
-        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
-        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
-        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
-        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
-        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
-        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),
-        new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0),new Tuple<int,int>(0,0) };
+        new Tuple<int,int>(-445,100),new Tuple<int,int>(-477,167), new Tuple<int,int>(-397,168),new Tuple<int,int>(-582,136),new Tuple<int,int>(-334,160),new Tuple<int,int>(-187,125),
+        new Tuple<int,int>(-177,208),new Tuple<int,int>(-97,222),new Tuple<int,int>(-114,164),new Tuple<int,int>(-60,183),new Tuple<int,int>(-3,238),new Tuple<int,int>(-360,107),
+        new Tuple<int,int>(-397,30),new Tuple<int,int>(-560,50), new Tuple<int,int>(-487,20),new Tuple<int,int>(-395,-50),new Tuple<int,int>(-290,-150),new Tuple<int,int>(-435,-140),
+        new Tuple<int,int>(-420,-220),new Tuple<int,int>(-330,-205),new Tuple<int,int>(-123,-36),new Tuple<int,int>(-69,-97),new Tuple<int,int>(-17,-20),new Tuple<int,int>(-20,-175),
+        new Tuple<int,int>(-100,78),new Tuple<int,int>(-17,135),new Tuple<int,int>(40,183),new Tuple<int,int>(100,147),new Tuple<int,int>(31,90),new Tuple<int,int>(40,15),
+        new Tuple<int,int>(114,70),new Tuple<int,int>(174,90),new Tuple<int,int>(117,0),new Tuple<int,int>(-33,69),new Tuple<int,int>(187,-38),new Tuple<int,int>(231,70),
+        new Tuple<int,int>(423,-222),new Tuple<int,int>(375,-60),new Tuple<int,int>(241,-105),new Tuple<int,int>(292,-60),new Tuple<int,int>(292,40),new Tuple<int,int>(240,0),
+        new Tuple<int,int>(355,53),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
 
         List<string> colors = new List<string> {"blue", "yellow" , "black","red"};
         for(int i = 0; i <= 3; i++)
@@ -174,6 +174,7 @@ public class Game : MonoBehaviour
         return obj;
     }
 
+    //this should be called after every action?
     public void SetPosition(GameObject obj)
     {
         Pawn p = obj.GetComponent<Pawn>();
@@ -192,6 +193,7 @@ public class Game : MonoBehaviour
         {
             case 1:
                 ps[0].transform.position = new Vector3(c.getXBoard(), c.getYBoard(), -2.0f);
+                break;
             case 2:
                 ps[0].transform.position = new Vector3(c.getXBoard() - 20,c.getYBoard(), -2.0f);
                 ps[1].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard(), -2.0f); //change xboard and yboard for pawns?
@@ -221,7 +223,7 @@ public class Game : MonoBehaviour
         return gameOver;
     }
 
-    public void NextTurn()
+    public void NextTurn() //change the current player using setter and pawns object in here
     {
         if (turn == 4)
         {
