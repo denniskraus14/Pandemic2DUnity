@@ -19,6 +19,7 @@ public class Game : MonoBehaviour
     public List<GameObject> pawns; //replacing players
     public List<GameObject> diseases; //replacing diseases - make a disease class
     public Dictionary<string,City> cities = new Dictionary<string, City>(); //replacing cities
+    public GameObject atlanta, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
 
     private GameObject currentPlayer;
 
@@ -83,8 +84,23 @@ public class Game : MonoBehaviour
             SetPosition(temp); //make the pawn show up
         }
         currentPlayer = pawns[turn - 1];
-}
-    
+        GameObject obj = Instantiate(atlanta, new Vector3(-445, 110, -2), Quaternion.identity);
+        GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
+        GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
+        GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
+        obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
+        GameObject obj4 = Instantiate(disease2, new Vector3(-220, -355, -2), Quaternion.identity);
+        obj4.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        GameObject obj5 = Instantiate(disease3, new Vector3(-170, -355, -2), Quaternion.identity);
+        obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
+        GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
+        obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
+
+
+
+
+    }
+
     public void InitializeCities()
     {
         List<string> citynames = new List<string>() {
@@ -125,11 +141,13 @@ public class Game : MonoBehaviour
                 acc.Add("yellow", 0);
                 if (citynames[i*12+j].Equals("Atlanta")){
                     GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
                 else
                 {
                     GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
             }
