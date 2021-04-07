@@ -147,6 +147,7 @@ public class City : MonoBehaviour
         List<City> neis = loc.connections;
         if (neis.Contains(this))
         {
+            loc.getPlayers().Remove(player);
             player.DestroyMovePlates();//destroy the moveplates
             //move the person
             float x = this.getXBoard();
@@ -154,25 +155,34 @@ public class City : MonoBehaviour
             player.setXBoard(x);
             player.setYBoard(y); //is this enough to move the sprite as well?
             player.transform.position = new Vector3(player.getXBoard(),player.getYBoard(),-2.0f);
-            //increase the action counter
-            controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction()+1);
+            player.setLocation(this);
+            this.getPlayers().Add(player);
+            controller.GetComponent<Game>().Arrange(this);
+            ActionSpent();
         }
         else
         {
             player.DestroyMovePlates();//destroy the moveplates
             player.setXBoard(0.0f);
-            player.setYBoard(0.0f); //is this enough to move the sprite as well?
+            player.setYBoard(0.0f); //this will tell you when a city move is invalid
             player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
         }
-        /*
-        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(), reference.GetComponent<Chessman>().GetYBoard());
-
-        reference.GetComponent<Chessman>().SetXBoard(matrixX);
-        reference.GetComponent<Chessman>().SetYBoard(matrixY);
-        reference.GetComponent<Chessman>().SetCoords();
-
-        controller.GetComponent<Game>().SetPosition(reference);
-        reference.GetComponent<Chessman>().DestroyMovePlates();
-        controller.GetComponent<Game>().NextTurn(); //switch from one player to the next */
+    }
+    public void ActionSpent()
+    {
+        //increase the action counter
+        controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction() + 1);
+        if (controller.GetComponent<Game>().getAction()== 4)
+        {
+            //draw two
+            //discard to 7 and resolve epidemics
+            //infect
+            //reset the actions
+            controller.GetComponent<Game>().setAction(0);
+            //make it the next person's turn
+            controller.GetComponent<Game>().NextTurn();
+        }
+        else ;//the turn just keeps going
+        
     }
 }

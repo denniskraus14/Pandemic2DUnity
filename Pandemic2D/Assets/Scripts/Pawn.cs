@@ -50,6 +50,53 @@ public class Pawn : MonoBehaviour
     {
         player = p;
     }
+    public City getLocation()
+    {
+        return location;
+    }
+    public string getName()
+    {
+        return name;
+    }
+    public string getRole()
+    {
+        return role;
+    }
+    public City[] getCards()
+    {
+        return cards;
+    }
+    public void setName(string n)
+    {
+        name = n;
+    }
+    public void setLocation(City c)
+    {
+        location = c;
+    }
+    public void setCards(City[] cs)
+    {
+        cards = cs;
+    }
+    public void setRole(string r)
+    {
+        role = r;
+    }
+    public void Activate()
+    {
+        controller = GameObject.FindGameObjectWithTag("GameController");
+        //take the instantiated location and adjust the transform
+        switch (this.role)
+        {
+            case "Dispatcher": this.GetComponent<SpriteRenderer>().sprite = Dispatcher; break;
+            case "Medic": this.GetComponent<SpriteRenderer>().sprite = Medic; break;
+            case "Researcher": this.GetComponent<SpriteRenderer>().sprite = Researcher; break;
+            case "Scientist": this.GetComponent<SpriteRenderer>().sprite = Scientist; break;
+            case "QuarantineSpecialist": this.GetComponent<SpriteRenderer>().sprite = QuarantineSpecialist; break;
+            case "ContingencyPlanner": this.GetComponent<SpriteRenderer>().sprite = ContingencyPlanner; break;
+            case "OperationsExpert": this.GetComponent<SpriteRenderer>().sprite = OperationsExpert; break;
+        }
+    }
 
     private void OnMouseUp() {
         if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().getCurrentPlayer().Equals(player))
@@ -91,71 +138,4 @@ public class Pawn : MonoBehaviour
             nei.GetComponent<SpriteRenderer>().color = temp;
         }
     }
-
-    public City getLocation()
-    {
-        return location;
-    }
-    public string getName()
-    {
-        return name;
-    }
-    public string getRole()
-    {
-        return role;
-    }
-    public City[] getCards()
-    {
-        return cards;
-    }
-    public void setName(string n)
-    {
-        name = n;
-    }
-    public void setLocation(City c)
-    {
-        location = c;
-    }
-    public void setCards(City[] cs)
-    {
-        cards = cs;
-    }
-    public void setRole(string r)
-    {
-        role = r;
-    }
-    public void Activate()
-    {
-        controller = GameObject.FindGameObjectWithTag("GameController");
-        //take the instantiated location and adjust the transform
-        SetCoords(); //everyone would start in atlanta
-
-        switch (this.role)
-        {
-            case "Dispatcher": this.GetComponent<SpriteRenderer>().sprite = Dispatcher; break;
-            case "Medic": this.GetComponent<SpriteRenderer>().sprite = Medic; break;
-            case "Researcher": this.GetComponent<SpriteRenderer>().sprite = Researcher; break;
-            case "Scientist": this.GetComponent<SpriteRenderer>().sprite = Scientist; break;
-            case "QuarantineSpecialist": this.GetComponent<SpriteRenderer>().sprite = QuarantineSpecialist; break;
-            case "ContingencyPlanner": this.GetComponent<SpriteRenderer>().sprite = ContingencyPlanner;break;
-            case "OperationsExpert": this.GetComponent<SpriteRenderer>().sprite = OperationsExpert; break;
-        }
-    }
-
-    public void SetCoords()
-    {//get everyone to start in atlanta
-        /*
-        float x = xBoard;
-        float y = yBoard;
-
-        x *= .66f;
-        y *= .66f;
-
-        x += -2.3f;
-        y += -2.3f;
-
-        this.transform.position = new Vector3(x, y, -2.0f);*/
-    }
-
-    
 }
