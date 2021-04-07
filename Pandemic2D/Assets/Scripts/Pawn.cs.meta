@@ -5,6 +5,8 @@ MonoImporter:
   serializedVersion: 2
   defaultReferences:
   - controller: {instanceID: 0}
+  - movePlate: {fileID: 7733986424981200447, guid: 17e79c975273e924a95692ad3b4d9c77,
+      type: 3}
   - Dispatcher: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}
   - Medic: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}
   - Researcher: {fileID: 21300000, guid: 59f445df2a2093743a159e35b92adc2f, type: 3}

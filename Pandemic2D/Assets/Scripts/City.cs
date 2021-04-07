@@ -8,8 +8,8 @@ public class City : MonoBehaviour
     public GameObject controller;
 
     //Positions
-    private int xBoard = -1;
-    private int yBoard = -1;
+    private float xBoard = -1;
+    private float yBoard = -1;
 
     private string name;
     private string color;
@@ -87,6 +87,25 @@ public class City : MonoBehaviour
     {
         return connections;
     }
+    public float getXBoard()
+    {
+        return xBoard;
+    }
+
+    public float getYBoard()
+    {
+        return yBoard;
+    }
+
+    public void setXBoard(float x)
+    {
+        xBoard = x;
+    }
+
+    public void setYBoard(float y)
+    {
+        yBoard = y;
+    }
 
     public void Activate(string name)
     {
@@ -118,23 +137,42 @@ public class City : MonoBehaviour
         this.transform.position = new Vector3(x, y, -2.0f);*/
     }
 
-    public int getXBoard()
+    public void OnMouseUp()
     {
-        return xBoard;
-    }
+        controller = GameObject.FindGameObjectWithTag("GameController");
+        //make sure this city is a valid one to go to
+        GameObject obj = controller.GetComponent<Game>().getCurrentPlayer();
+        Pawn player = obj.GetComponent<Pawn>();
+        City loc = player.getLocation();
+        List<City> neis = loc.connections;
+        if (neis.Contains(this))
+        {
+            player.DestroyMovePlates();//destroy the moveplates
+            //move the person
+            float x = this.getXBoard();
+            float y = this.getYBoard();
+            player.setXBoard(x);
+            player.setYBoard(y); //is this enough to move the sprite as well?
+            player.transform.position = new Vector3(player.getXBoard(),player.getYBoard(),-2.0f);
+            //increase the action counter
+            controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction()+1);
+        }
+        else
+        {
+            player.DestroyMovePlates();//destroy the moveplates
+            player.setXBoard(0.0f);
+            player.setYBoard(0.0f); //is this enough to move the sprite as well?
+            player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+        }
+        /*
+        controller.GetComponent<Game>().SetPositionEmpty(reference.GetComponent<Chessman>().GetXBoard(), reference.GetComponent<Chessman>().GetYBoard());
 
-    public int getYBoard()
-    {
-        return yBoard;
-    }
+        reference.GetComponent<Chessman>().SetXBoard(matrixX);
+        reference.GetComponent<Chessman>().SetYBoard(matrixY);
+        reference.GetComponent<Chessman>().SetCoords();
 
-    public void setXBoard(int x)
-    {
-        xBoard = x;
-    }
-
-    public void setYBoard(int y)
-    {
-        yBoard = y;
+        controller.GetComponent<Game>().SetPosition(reference);
+        reference.GetComponent<Chessman>().DestroyMovePlates();
+        controller.GetComponent<Game>().NextTurn(); //switch from one player to the next */
     }
 }

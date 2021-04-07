@@ -6,6 +6,7 @@ TagManager:
   tags:
   - City
   - Pawn
+  - MovePlate
   layers:
   - Default
   - TransparentFX

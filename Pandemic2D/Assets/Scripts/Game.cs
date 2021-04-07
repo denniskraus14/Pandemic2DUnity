@@ -15,7 +15,8 @@ public class Game : MonoBehaviour
     public GameObject city;
 
 
-    public static int turn = 1;
+    public int turn = 1;
+    public int action = 0;
     public List<GameObject> pawns; //replacing players
     public List<GameObject> diseases; //replacing diseases - make a disease class
     public Dictionary<string,City> cities = new Dictionary<string, City>(); //replacing cities
@@ -25,31 +26,46 @@ public class Game : MonoBehaviour
 
     private bool gameOver = false;
 
-    private List<GameObject> getPawns()
+    public List<GameObject> getPawns()
     {
         return pawns;
     }
-    private void setPawns(List<GameObject> ps)
+    public void setPawns(List<GameObject> ps)
     {
         pawns = ps;
     }
-    private List<GameObject> getDiseases()
+    public List<GameObject> getDiseases()
     {
         return diseases;
     }
-    private void setDiseases(List<GameObject> ds)
+    public void setDiseases(List<GameObject> ds)
     {
         diseases = ds;
     }
-    private Dictionary<string, City> getCities()
+    public Dictionary<string, City> getCities()
     {
         return cities;
     }
-    private void setCities(Dictionary<string,City> cs)
+    public void setCities(Dictionary<string,City> cs)
     {
         cities = cs;
     }
-    
+    public void setTurn(int i)
+    {
+        turn = i;
+    }
+    public int getTurn()
+    {
+        return turn;
+    }
+    public void setAction(int i)
+    {
+        action = i;
+    }
+    public int getAction()
+    {
+        return action;
+    }
 
     // Start is called before the first frame update
     public void Start()
@@ -83,7 +99,7 @@ public class Game : MonoBehaviour
             pawns.Add(temp);
             SetPosition(temp); //make the pawn show up
         }
-        currentPlayer = pawns[turn - 1];
+        setCurrentPlayer(pawns[getTurn() - 1]);
         GameObject obj = Instantiate(atlanta, new Vector3(-445, 110, -2), Quaternion.identity);
         GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
         GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
@@ -95,10 +111,6 @@ public class Game : MonoBehaviour
         obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
         GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
         obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
-
-
-
-
     }
 
     public void InitializeCities()
@@ -128,17 +140,6 @@ public class Game : MonoBehaviour
         new Tuple<int,int>(114,70),new Tuple<int,int>(174,90),new Tuple<int,int>(117,0),new Tuple<int,int>(-33,69),new Tuple<int,int>(187,-38),new Tuple<int,int>(231,70),
         new Tuple<int,int>(423,-222),new Tuple<int,int>(375,-60),new Tuple<int,int>(241,-105),new Tuple<int,int>(292,-60),new Tuple<int,int>(292,40),new Tuple<int,int>(240,0),
         new Tuple<int,int>(355,53),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
-        List<List<City>> tempconnect = new List<List<City>>()
-        {
-            new List<City>(){cities["Miami"], cities["Washington"], cities["Chicago"] },new List<City>(){ cities["Atlanta"], cities["San Francisco"], cities["Mexico City"], cities["Montreal"], cities["Los Angeles"] },new List<City>(){ cities["New York"], cities["Washington"], cities["Chicago"]},new List<City>(){ cities["Tokyo"], cities["Manilla"], cities["Los Angeles"], cities["Chicago"]},new List<City>(){ cities["London"], cities["Madrid"], cities["Washington"], cities["Montreal" ]},new List<City>(){ cities["Sao Paolo"], cities["London"], cities["New York"], cities["Paris"], cities["Algiers"] },
-            new List<City>(){ cities["Essen"], cities["Madrid"], cities["New York"], cities["Paris" ]},new List<City>(){ cities["Milan"], cities["London"], cities["St. Petersburg"], cities["Paris" ]},new List<City>(){ cities["Madrid"], cities["Milan"], cities["London"], cities["Essen"], cities["Algiers"] },new List<City>(){ cities["Essen"], cities["Paris"] },new List<City>(){ cities["Istanbul"], cities["Moscow"], cities["Essen"] },new List<City>(){ cities["Atlanta"], cities["New York"], cities["Montreal"], cities["Miami"] },
-            new List<City>(){ cities["Atlanta"], cities["Bogota"], cities["Washington"], cities["Mexico City"] },new List<City>(){ cities["San Francisco"], cities["Mexico City"], cities["Sydney"], cities["Chicago"] },new List<City>(){ cities["Los Angeles"], cities["Bogota"], cities["Lima"], cities["Miami"], cities["Chicago"] },new List<City>(){ cities["Mexico City"], cities["Buenos Aires"], cities["Sao Paolo"], cities["Miami"], cities["Lima"] },new List<City>(){ cities["Bogota"], cities["Madrid"], cities["Buenos Aires"], cities["Lagos" ]},new List<City>(){ cities["Bogota"], cities["Mexico City"], cities["Santiago"]},
-            new List<City>(){ cities["Lima"]},new List<City>(){ cities["Sao Paolo"], cities["Bogota"]},new List<City>(){ cities["Sao Paolo"], cities["Khartoum"], cities["Kinshasa"] },new List<City>(){ cities["Lagos"], cities["Johannesburg"], cities["Khartoum"]},new List<City>(){ cities["Cairo"], cities["Lagos"], cities["Kinshasa"], cities["Johannesburg"] },new List<City>(){ cities["Khartoum"], cities["Kinshasa"] },
-            new List<City>(){ cities["Istanbul"], cities["Cairo"], cities["Madrid"], cities["Paris"] },new List<City>(){ cities["Baghdad"], cities["Cairo"], cities["Moscow"], cities["St. Petersburg"], cities["Algiers"] },new List<City>(){ cities["Istanbul"], cities["St. Petersburg"], cities["Tehran"] },new List<City>(){ cities["Delhi"], cities["Moscow"], cities["Karachi"], cities["Baghdad"] },new List<City>(){ cities["Istanbul"], cities["Karachi"], cities["Cairo"], cities["Riyadh"], cities["Tehran"]},new List<City>(){ cities["Cairo"], cities["Karachi"], cities["Baghdad"]},
-            new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Delhi"], cities["Riyadh"], cities["Baghdad"]},new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Kolkatta"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Delhi"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Baghdad"], cities["Istanbul"], cities["Khartoum"], cities["Riyadh"], cities["Algiers"]},new List<City>(){ cities["Mumbai"], cities["Delhi"], cities["Jakarta"], cities["Kolkatta"], cities["Bangkok"]},new List<City>(){ cities["Delhi"], cities["Bangkok"], cities["Hong Kong"], cities["Chennai"]},
-            new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Los Angeles"]},new List<City>(){ cities["Taipei"], cities["Ho Chi Minh City"], cities["Hong Kong"], cities["Sydney"], cities["San Francisco"] },new List<City>(){ cities["Bangkok"], cities["Sydney"], cities["Chennai"], cities["Ho Chi Minh City"]},new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Bangkok"], cities["Hong Kong"] },new List<City>(){ cities["Bangkok"], cities["Manilla"], cities["Kolkatta"], cities["Shanghai"], cities["Ho Chi Minh City"], cities["Taipei"] },new List<City>(){ cities["Kolkatta"], cities["Jakarta"], cities["Ho Chi Minh City"], cities["Chennai"], cities["Hong Kong"]},
-            new List<City>(){ cities["Osaka"], cities["Shanghai"], cities["Manilla"], cities["Hong Kong"] },new List<City>(){ cities["Tokyo"], cities["Taipei"] },new List<City>(){ cities["Seoul"], cities["Shanghai"] },new List<City>(){ cities["Tokyo"], cities["Shanghai"], cities["Beijing"]},new List<City>(){ cities["Osaka"], cities["Seoul"], cities["Shanghai"], cities["San Francisco"]},new List<City>(){ cities["Seoul"], cities["Tokyo"], cities["Beijing"], cities["Hong Kong"], cities["Taipei"]},
-        };
 
         List<string> colors = new List<string> {"blue", "yellow" , "black","red"};
         for(int i = 0; i <= 3; i++)
@@ -151,17 +152,33 @@ public class Game : MonoBehaviour
                 acc.Add("red", 0);
                 acc.Add("yellow", 0);
                 if (citynames[i*12+j].Equals("Atlanta")){
-                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2,tempconnect[i*12+j]);
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
                     temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
                 else
                 {
-                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2, tempconnect[i * 12 + j]);
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
                     temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
             }
+        }
+        List<List<City>> tempconnect = new List<List<City>>()
+        {
+            new List<City>(){cities["Miami"], cities["Washington"], cities["Chicago"] },new List<City>(){ cities["Atlanta"], cities["San Francisco"], cities["Mexico City"], cities["Montreal"], cities["Los Angeles"] },new List<City>(){ cities["New York"], cities["Washington"], cities["Chicago"]},new List<City>(){ cities["Tokyo"], cities["Manilla"], cities["Los Angeles"], cities["Chicago"]},new List<City>(){ cities["London"], cities["Madrid"], cities["Washington"], cities["Montreal" ]},new List<City>(){ cities["Sao Paolo"], cities["London"], cities["New York"], cities["Paris"], cities["Algiers"] },
+            new List<City>(){ cities["Essen"], cities["Madrid"], cities["New York"], cities["Paris" ]},new List<City>(){ cities["Milan"], cities["London"], cities["St. Petersburg"], cities["Paris" ]},new List<City>(){ cities["Madrid"], cities["Milan"], cities["London"], cities["Essen"], cities["Algiers"] },new List<City>(){ cities["Essen"], cities["Paris"] },new List<City>(){ cities["Istanbul"], cities["Moscow"], cities["Essen"] },new List<City>(){ cities["Atlanta"], cities["New York"], cities["Montreal"], cities["Miami"] },
+            new List<City>(){ cities["Atlanta"], cities["Bogota"], cities["Washington"], cities["Mexico City"] },new List<City>(){ cities["San Francisco"], cities["Mexico City"], cities["Sydney"], cities["Chicago"] },new List<City>(){ cities["Los Angeles"], cities["Bogota"], cities["Lima"], cities["Miami"], cities["Chicago"] },new List<City>(){ cities["Mexico City"], cities["Buenos Aires"], cities["Sao Paolo"], cities["Miami"], cities["Lima"] },new List<City>(){ cities["Bogota"], cities["Madrid"], cities["Buenos Aires"], cities["Lagos" ]},new List<City>(){ cities["Bogota"], cities["Mexico City"], cities["Santiago"]},
+            new List<City>(){ cities["Lima"]},new List<City>(){ cities["Sao Paolo"], cities["Bogota"]},new List<City>(){ cities["Sao Paolo"], cities["Khartoum"], cities["Kinshasa"] },new List<City>(){ cities["Lagos"], cities["Johannesburg"], cities["Khartoum"]},new List<City>(){ cities["Cairo"], cities["Lagos"], cities["Kinshasa"], cities["Johannesburg"] },new List<City>(){ cities["Khartoum"], cities["Kinshasa"] },
+            new List<City>(){ cities["Istanbul"], cities["Cairo"], cities["Madrid"], cities["Paris"] },new List<City>(){ cities["Baghdad"], cities["Cairo"], cities["Moscow"], cities["St. Petersburg"], cities["Algiers"] },new List<City>(){ cities["Istanbul"], cities["St. Petersburg"], cities["Tehran"] },new List<City>(){ cities["Delhi"], cities["Moscow"], cities["Karachi"], cities["Baghdad"] },new List<City>(){ cities["Istanbul"], cities["Karachi"], cities["Cairo"], cities["Riyadh"], cities["Tehran"]},new List<City>(){ cities["Cairo"], cities["Karachi"], cities["Baghdad"]},
+            new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Delhi"], cities["Riyadh"], cities["Baghdad"]},new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Kolkatta"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Delhi"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Baghdad"], cities["Istanbul"], cities["Khartoum"], cities["Riyadh"], cities["Algiers"]},new List<City>(){ cities["Mumbai"], cities["Delhi"], cities["Jakarta"], cities["Kolkatta"], cities["Bangkok"]},new List<City>(){ cities["Delhi"], cities["Bangkok"], cities["Hong Kong"], cities["Chennai"]},
+            new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Los Angeles"]},new List<City>(){ cities["Taipei"], cities["Ho Chi Minh City"], cities["Hong Kong"], cities["Sydney"], cities["San Francisco"] },new List<City>(){ cities["Bangkok"], cities["Sydney"], cities["Chennai"], cities["Ho Chi Minh City"]},new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Bangkok"], cities["Hong Kong"] },new List<City>(){ cities["Bangkok"], cities["Manilla"], cities["Kolkatta"], cities["Shanghai"], cities["Ho Chi Minh City"], cities["Taipei"] },new List<City>(){ cities["Kolkatta"], cities["Jakarta"], cities["Ho Chi Minh City"], cities["Chennai"], cities["Hong Kong"]},
+            new List<City>(){ cities["Osaka"], cities["Shanghai"], cities["Manilla"], cities["Hong Kong"] },new List<City>(){ cities["Tokyo"], cities["Taipei"] },new List<City>(){ cities["Seoul"], cities["Shanghai"] },new List<City>(){ cities["Tokyo"], cities["Shanghai"], cities["Beijing"]},new List<City>(){ cities["Osaka"], cities["Seoul"], cities["Shanghai"], cities["San Francisco"]},new List<City>(){ cities["Seoul"], cities["Tokyo"], cities["Beijing"], cities["Hong Kong"], cities["Taipei"]},
+        };
+        //test  this to make sure it is working
+        for(int k = 0; k < 48; k++)
+        {
+            cities[citynames[k]].setConnections(tempconnect[k]); //this is assigning connections to each of the cities
         }
     }
 
@@ -180,11 +197,12 @@ public class Game : MonoBehaviour
         p.setCards(null); //fix this later
         p.setXBoard(xBoard);
         p.setYBoard(yBoard);
+        p.setPlayer(obj);
         p.Activate();
         return obj;
     }
     
-    public GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y, List<City> connections)
+    public GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y)
     {
         GameObject obj = Instantiate(city, new Vector3(x, y, -2), Quaternion.identity);
         City c = obj.GetComponent<City>();
@@ -196,7 +214,7 @@ public class Game : MonoBehaviour
         c.setPopulation(pop);
         c.setXBoard(x);
         c.setYBoard(y);
-        c.setConnections(connections);
+        //c.setConnections(connections);
         c.setPlayers(new List<Pawn>()); //set city to have no players in it initially
         c.Activate(name);
         return obj;
@@ -206,7 +224,7 @@ public class Game : MonoBehaviour
     public void SetPosition(GameObject obj)
     {
         Pawn p = obj.GetComponent<Pawn>();
-        pawns.Add(obj);
+        //pawns.Add(obj);
         Arrange(p.getLocation());//arrange the pawns around a city nicely
     }
 
@@ -214,36 +232,39 @@ public class Game : MonoBehaviour
     public void Arrange(City c)
     {
         List<Pawn> ps = c.getPlayers();
-        int x = c.getXBoard();
-        int y = c.getYBoard();
+        float x = c.getXBoard();
+        float y = c.getYBoard();
         int n = ps.Count;
         switch (n)
         {
             case 1:
-                ps[0].transform.position = new Vector3(c.getXBoard(), c.getYBoard(), -2.0f);
+                ps[0].transform.position = new Vector3(x, y, -2.0f);
                 break;
             case 2:
-                ps[0].transform.position = new Vector3(c.getXBoard() - 20,c.getYBoard(), -2.0f);
-                ps[1].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard(), -2.0f); //change xboard and yboard for pawns?
+                ps[0].transform.position = new Vector3(x - 20, y, -2.0f);
+                ps[1].transform.position = new Vector3(x + 20, y, -2.0f); //change xboard and yboard for pawns?
                 break;
             case 3:
-                ps[0].transform.position = new Vector3(c.getXBoard() - 20, c.getYBoard(), -2.0f);
-                ps[1].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard(), -2.0f);
-                ps[2].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard() + 35, -2.0f);
+                ps[0].transform.position = new Vector3(x - 20, y, -2.0f);
+                ps[1].transform.position = new Vector3(x + 20, y, -2.0f);
+                ps[2].transform.position = new Vector3(x  + 20, y + 35, -2.0f);
                 break;
             case 4:
-                ps[0].transform.position = new Vector3(c.getXBoard() - 20, c.getYBoard(), -2.0f);
-                ps[1].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard(), -2.0f);
-                ps[2].transform.position = new Vector3(c.getXBoard() + 20, c.getYBoard() + 35, -2.0f);
-                ps[3].transform.position = new Vector3(c.getXBoard() - 20, c.getYBoard() + 35, -2.0f);
+                ps[0].transform.position = new Vector3(x - 20, y, -2.0f);
+                ps[1].transform.position = new Vector3(x + 20, y, -2.0f);
+                ps[2].transform.position = new Vector3(x + 20, y + 35, -2.0f);
+                ps[3].transform.position = new Vector3(x - 20, y + 35, -2.0f);
                 break;
         }
-        
     }
 
-    public GameObject GetCurrentPlayer()
+    public GameObject getCurrentPlayer()
     {
         return currentPlayer;
+    }
+    public void setCurrentPlayer(GameObject p)
+    {
+        currentPlayer = p;
     }
 
     public bool IsGameOver()
