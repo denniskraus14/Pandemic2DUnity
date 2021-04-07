@@ -128,6 +128,17 @@ public class Game : MonoBehaviour
         new Tuple<int,int>(114,70),new Tuple<int,int>(174,90),new Tuple<int,int>(117,0),new Tuple<int,int>(-33,69),new Tuple<int,int>(187,-38),new Tuple<int,int>(231,70),
         new Tuple<int,int>(423,-222),new Tuple<int,int>(375,-60),new Tuple<int,int>(241,-105),new Tuple<int,int>(292,-60),new Tuple<int,int>(292,40),new Tuple<int,int>(240,0),
         new Tuple<int,int>(355,53),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
+        List<List<City>> tempconnect = new List<List<City>>()
+        {
+            new List<City>(){cities["Miami"], cities["Washington"], cities["Chicago"] },new List<City>(){ cities["Atlanta"], cities["San Francisco"], cities["Mexico City"], cities["Montreal"], cities["Los Angeles"] },new List<City>(){ cities["New York"], cities["Washington"], cities["Chicago"]},new List<City>(){ cities["Tokyo"], cities["Manilla"], cities["Los Angeles"], cities["Chicago"]},new List<City>(){ cities["London"], cities["Madrid"], cities["Washington"], cities["Montreal" ]},new List<City>(){ cities["Sao Paolo"], cities["London"], cities["New York"], cities["Paris"], cities["Algiers"] },
+            new List<City>(){ cities["Essen"], cities["Madrid"], cities["New York"], cities["Paris" ]},new List<City>(){ cities["Milan"], cities["London"], cities["St. Petersburg"], cities["Paris" ]},new List<City>(){ cities["Madrid"], cities["Milan"], cities["London"], cities["Essen"], cities["Algiers"] },new List<City>(){ cities["Essen"], cities["Paris"] },new List<City>(){ cities["Istanbul"], cities["Moscow"], cities["Essen"] },new List<City>(){ cities["Atlanta"], cities["New York"], cities["Montreal"], cities["Miami"] },
+            new List<City>(){ cities["Atlanta"], cities["Bogota"], cities["Washington"], cities["Mexico City"] },new List<City>(){ cities["San Francisco"], cities["Mexico City"], cities["Sydney"], cities["Chicago"] },new List<City>(){ cities["Los Angeles"], cities["Bogota"], cities["Lima"], cities["Miami"], cities["Chicago"] },new List<City>(){ cities["Mexico City"], cities["Buenos Aires"], cities["Sao Paolo"], cities["Miami"], cities["Lima"] },new List<City>(){ cities["Bogota"], cities["Madrid"], cities["Buenos Aires"], cities["Lagos" ]},new List<City>(){ cities["Bogota"], cities["Mexico City"], cities["Santiago"]},
+            new List<City>(){ cities["Lima"]},new List<City>(){ cities["Sao Paolo"], cities["Bogota"]},new List<City>(){ cities["Sao Paolo"], cities["Khartoum"], cities["Kinshasa"] },new List<City>(){ cities["Lagos"], cities["Johannesburg"], cities["Khartoum"]},new List<City>(){ cities["Cairo"], cities["Lagos"], cities["Kinshasa"], cities["Johannesburg"] },new List<City>(){ cities["Khartoum"], cities["Kinshasa"] },
+            new List<City>(){ cities["Istanbul"], cities["Cairo"], cities["Madrid"], cities["Paris"] },new List<City>(){ cities["Baghdad"], cities["Cairo"], cities["Moscow"], cities["St. Petersburg"], cities["Algiers"] },new List<City>(){ cities["Istanbul"], cities["St. Petersburg"], cities["Tehran"] },new List<City>(){ cities["Delhi"], cities["Moscow"], cities["Karachi"], cities["Baghdad"] },new List<City>(){ cities["Istanbul"], cities["Karachi"], cities["Cairo"], cities["Riyadh"], cities["Tehran"]},new List<City>(){ cities["Cairo"], cities["Karachi"], cities["Baghdad"]},
+            new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Delhi"], cities["Riyadh"], cities["Baghdad"]},new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Kolkatta"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Delhi"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Baghdad"], cities["Istanbul"], cities["Khartoum"], cities["Riyadh"], cities["Algiers"]},new List<City>(){ cities["Mumbai"], cities["Delhi"], cities["Jakarta"], cities["Kolkatta"], cities["Bangkok"]},new List<City>(){ cities["Delhi"], cities["Bangkok"], cities["Hong Kong"], cities["Chennai"]},
+            new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Los Angeles"]},new List<City>(){ cities["Taipei"], cities["Ho Chi Minh City"], cities["Hong Kong"], cities["Sydney"], cities["San Francisco"] },new List<City>(){ cities["Bangkok"], cities["Sydney"], cities["Chennai"], cities["Ho Chi Minh City"]},new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Bangkok"], cities["Hong Kong"] },new List<City>(){ cities["Bangkok"], cities["Manilla"], cities["Kolkatta"], cities["Shanghai"], cities["Ho Chi Minh City"], cities["Taipei"] },new List<City>(){ cities["Kolkatta"], cities["Jakarta"], cities["Ho Chi Minh City"], cities["Chennai"], cities["Hong Kong"]},
+            new List<City>(){ cities["Osaka"], cities["Shanghai"], cities["Manilla"], cities["Hong Kong"] },new List<City>(){ cities["Tokyo"], cities["Taipei"] },new List<City>(){ cities["Seoul"], cities["Shanghai"] },new List<City>(){ cities["Tokyo"], cities["Shanghai"], cities["Beijing"]},new List<City>(){ cities["Osaka"], cities["Seoul"], cities["Shanghai"], cities["San Francisco"]},new List<City>(){ cities["Seoul"], cities["Tokyo"], cities["Beijing"], cities["Hong Kong"], cities["Taipei"]},
+        };
 
         List<string> colors = new List<string> {"blue", "yellow" , "black","red"};
         for(int i = 0; i <= 3; i++)
@@ -140,13 +151,13 @@ public class Game : MonoBehaviour
                 acc.Add("red", 0);
                 acc.Add("yellow", 0);
                 if (citynames[i*12+j].Equals("Atlanta")){
-                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2,tempconnect[i*12+j]);
                     temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
                 else
                 {
-                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2, tempconnect[i * 12 + j]);
                     temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
@@ -160,14 +171,12 @@ public class Game : MonoBehaviour
         var random = new System.Random(DateTime.Now.Millisecond);
         int xBoard = random.Next(-442, -412);
         int yBoard = random.Next(85, 115);
-        //Dictionary<string, City> cities = getCities();
         GameObject obj = Instantiate(pawn, new Vector3(xBoard, yBoard, -2), Quaternion.identity);
         Pawn p = obj.GetComponent<Pawn>();
         p.setName(name);
         p.setRole(role);
         p.setLocation(cities["Atlanta"]);
         cities["Atlanta"].getPlayers().Add(p);
-        //cities["Atlanta"].setPlayers(temp);
         p.setCards(null); //fix this later
         p.setXBoard(xBoard);
         p.setYBoard(yBoard);
@@ -175,7 +184,7 @@ public class Game : MonoBehaviour
         return obj;
     }
     
-    public GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y)
+    public GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y, List<City> connections)
     {
         GameObject obj = Instantiate(city, new Vector3(x, y, -2), Quaternion.identity);
         City c = obj.GetComponent<City>();
@@ -187,6 +196,7 @@ public class Game : MonoBehaviour
         c.setPopulation(pop);
         c.setXBoard(x);
         c.setYBoard(y);
+        c.setConnections(connections);
         c.setPlayers(new List<Pawn>()); //set city to have no players in it initially
         c.Activate(name);
         return obj;

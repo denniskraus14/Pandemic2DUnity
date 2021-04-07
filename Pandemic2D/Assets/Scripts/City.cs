@@ -18,6 +18,7 @@ public class City : MonoBehaviour
     private bool research_station = false;
     private int population;
     private List<Pawn> players;
+    private List<City> connections;
 
     public Sprite red_city, blue_city, yellow_city, black_city;
 
@@ -77,6 +78,14 @@ public class City : MonoBehaviour
     public List<Pawn> getPlayers()
     {
         return players;
+    }
+    public void setConnections(List<City> cs)
+    {
+        connections = cs;
+    }
+    public List<City> getConnections()
+    {
+        return connections;
     }
 
     public void Activate(string name)
