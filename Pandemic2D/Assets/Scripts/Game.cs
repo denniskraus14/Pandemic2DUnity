@@ -19,53 +19,15 @@ public class Game : MonoBehaviour
     public int action = 0;
     public List<GameObject> pawns; //replacing players
     public List<GameObject> diseases; //replacing diseases - make a disease class
-    public Dictionary<string,City> cities = new Dictionary<string, City>(); //replacing cities
-    public GameObject atlanta, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
-
+    public Dictionary<string, City> cities = new Dictionary<string, City>(); //replacing cities
+    public GameObject atlanta; //, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
+    public List<Card> citydeck;
+    public List<Card> citydeck_discard;
+    public List<Card> infectdeck;
+    public List<Card> infectdeck_discard;
+    public List<Card> eventcards;
     private GameObject currentPlayer;
-
     private bool gameOver = false;
-
-    public List<GameObject> getPawns()
-    {
-        return pawns;
-    }
-    public void setPawns(List<GameObject> ps)
-    {
-        pawns = ps;
-    }
-    public List<GameObject> getDiseases()
-    {
-        return diseases;
-    }
-    public void setDiseases(List<GameObject> ds)
-    {
-        diseases = ds;
-    }
-    public Dictionary<string, City> getCities()
-    {
-        return cities;
-    }
-    public void setCities(Dictionary<string,City> cs)
-    {
-        cities = cs;
-    }
-    public void setTurn(int i)
-    {
-        turn = i;
-    }
-    public int getTurn()
-    {
-        return turn;
-    }
-    public void setAction(int i)
-    {
-        action = i;
-    }
-    public int getAction()
-    {
-        return action;
-    }
 
     // Start is called before the first frame update
     public void Start()
@@ -74,11 +36,11 @@ public class Game : MonoBehaviour
         //scene that asks to choose roles/ randomize roles
         InitializeCities();
         int n = 4; //assume 4 for now
-        List<string> names = new List<string>() { "Dennis","Dad","Gram","Oreo","Dhhyey","Jessie","Eric","Claus","Claus's Wife"};
-        List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert"};
+        List<string> names = new List<string>() { "Dennis", "Dad", "Gram", "Oreo", "Dhhyey", "Zach", "Kathleen", "Eric", "Claus", "Claus's Wife" };
+        List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert" };
         //set all piece positions on the board (Atlanta)
         var random = new System.Random();
-        for (int i = 1; i <=n; i++)
+        for (int i = 1; i <= n; i++)
         {
             //create the pawn object
             int random1 = random.Next(names.Count);
@@ -87,30 +49,35 @@ public class Game : MonoBehaviour
             names.Remove(names[random1]);
             roles.Remove(roles[random2]);
             string role = temp.GetComponent<Pawn>().getRole();
-            switch(role){
-                case "Dispatcher":temp.GetComponent<SpriteRenderer>().color = new Color(.62f,.196f,.745f,1.0f);break;
-                case "Medic":temp.GetComponent<SpriteRenderer>().color = new Color(1.0f,.556f,0.0f,1.0f);break;
+            switch (role)
+            {
+                case "Dispatcher": temp.GetComponent<SpriteRenderer>().color = new Color(.62f, .196f, .745f, 1.0f); break;
+                case "Medic": temp.GetComponent<SpriteRenderer>().color = new Color(1.0f, .556f, 0.0f, 1.0f); break;
                 case "Scientist": break;
-                case "Researcher": temp.GetComponent<SpriteRenderer>().color = new Color(.38f,.227f,.035f,1.0f); break;
-                case "QuarantineSpecialist": temp.GetComponent<SpriteRenderer>().color = new Color(.067f,.341f,.035f,1.0f); break;
-                case "ContingencyPlanner": temp.GetComponent<SpriteRenderer>().color = new Color(.05f,.52f,.79f,1.0f); break;
-                case "OperationsExpert": temp.GetComponent<SpriteRenderer>().color = new Color(.286f,.87f,.35f,1.0f); break;
+                case "Researcher": temp.GetComponent<SpriteRenderer>().color = new Color(.38f, .227f, .035f, 1.0f); break;
+                case "QuarantineSpecialist": temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 1.0f); break;
+                case "ContingencyPlanner": temp.GetComponent<SpriteRenderer>().color = new Color(.05f, .52f, .79f, 1.0f); break;
+                case "OperationsExpert": temp.GetComponent<SpriteRenderer>().color = new Color(.286f, .87f, .35f, 1.0f); break;
             }
             pawns.Add(temp);
             SetPosition(temp); //make the pawn show up
         }
         setCurrentPlayer(pawns[getTurn() - 1]);
         GameObject obj = Instantiate(atlanta, new Vector3(-445, 110, -2), Quaternion.identity); //research station
-        //GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
-        //GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
-        //GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
-        //obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
-        //GameObject obj4 = Instantiate(disease2, new Vector3(-220, -355, -2), Quaternion.identity);
-        //obj4.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-        //GameObject obj5 = Instantiate(disease3, new Vector3(-170, -355, -2), Quaternion.identity);
-        //obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
-        //GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
-        //obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
+                                                                                                //GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
+                                                                                                //GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
+                                                                                                //GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
+                                                                                                //obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
+                                                                                                //GameObject obj4 = Instantiate(disease2, new Vector3(-220, -355, -2), Quaternion.identity);
+                                                                                                //obj4.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+                                                                                                //GameObject obj5 = Instantiate(disease3, new Vector3(-170, -355, -2), Quaternion.identity);
+                                                                                                //obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
+                                                                                                //GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
+                                                                                                //obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
+        InitializeDecks();//initialize decks
+        pregame_dealing();
+        Instantiate();
+        //next infect the cities and properly prepare the cdeck w epidemics
     }
 
     public void InitializeCities()
@@ -119,7 +86,7 @@ public class Game : MonoBehaviour
         "Atlanta","Chicago","Montreal","San Francisco","New York","Madrid","London","Essen","Paris","Milan","St. Petersburg","Washington",
         "Miami", "Los Angeles","Mexico City","Bogota","Sao Paolo","Lima","Santiago","Buenos Aires","Lagos","Kinshasa","Khartoum","Johannesburg",
         "Algiers","Istanbul","Moscow","Tehran","Baghdad","Riyadh","Karachi","Delhi","Mumbai","Cairo","Chennai","Kolkatta",
-        "Sydney","Manilla","Jakarta","Ho Chi Minh City","Hong Kong","Bangkok","Taipei","Osaka","Beijing","Seoul","Tokyo","Shanghai" 
+        "Sydney","Manilla","Jakarta","Ho Chi Minh City","Hong Kong","Bangkok","Taipei","Osaka","Beijing","Seoul","Tokyo","Shanghai"
         };
 
         List<int> populations = new List<int>(){
@@ -141,17 +108,18 @@ public class Game : MonoBehaviour
         new Tuple<int,int>(423,-222),new Tuple<int,int>(375,-60),new Tuple<int,int>(241,-105),new Tuple<int,int>(292,-60),new Tuple<int,int>(292,40),new Tuple<int,int>(240,0),
         new Tuple<int,int>(355,53),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
 
-        List<string> colors = new List<string> {"blue", "yellow" , "black","red"};
-        for(int i = 0; i <= 3; i++)
+        List<string> colors = new List<string> { "blue", "yellow", "black", "red" };
+        for (int i = 0; i <= 3; i++)
         {
-            for(int j = 0; j <= 11; j++)
+            for (int j = 0; j <= 11; j++)
             {
                 Dictionary<string, int> acc = new Dictionary<string, int>();
                 acc.Add("black", 0);
                 acc.Add("blue", 0);
                 acc.Add("red", 0);
                 acc.Add("yellow", 0);
-                if (citynames[i*12+j].Equals("Atlanta")){
+                if (citynames[i * 12 + j].Equals("Atlanta"))
+                {
                     GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
                     temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
@@ -176,10 +144,36 @@ public class Game : MonoBehaviour
             new List<City>(){ cities["Osaka"], cities["Shanghai"], cities["Manilla"], cities["Hong Kong"] },new List<City>(){ cities["Tokyo"], cities["Taipei"] },new List<City>(){ cities["Seoul"], cities["Shanghai"] },new List<City>(){ cities["Tokyo"], cities["Shanghai"], cities["Beijing"]},new List<City>(){ cities["Osaka"], cities["Seoul"], cities["Shanghai"], cities["San Francisco"]},new List<City>(){ cities["Seoul"], cities["Tokyo"], cities["Beijing"], cities["Hong Kong"], cities["Taipei"]},
         };
         //test  this to make sure it is working
-        for(int k = 0; k < 48; k++)
+        for (int k = 0; k < 48; k++)
         {
             cities[citynames[k]].setConnections(tempconnect[k]); //this is assigning connections to each of the cities
         }
+    }
+    public void InitializeDecks()
+    {
+        setCitydeckDiscard(new List<Card>());
+        setCitydeck(new List<Card>());
+        setInfectdeckDiscard(new List<Card>());
+        setInfectdeck(new List<Card>());
+        List<Card> temp = getCitydeck();
+        List<Card> temp2 = getInfectdeck();
+        Dictionary<string, City> cities = getCities();
+        foreach (KeyValuePair<string,City> kvp in cities)
+        {
+            temp.Add(new Card(kvp.Key));
+            temp2.Add(new Card(kvp.Key));
+        }
+        setEventcards(new List<Card>() {new Card("Airlift", false),
+                                        new Card("Government Grant", false),
+                                        new Card("Resilient Population", false),
+                                        new Card("One Quiet Night", false),
+                                        new Card("Forecast", false)});
+        foreach(Card c in getEventcards())
+        {
+            temp.Add(c);
+            temp.Add(new Card("Epidemic"));
+        }
+        temp.Add(new Card("Epidemic")); //assume 6 epidemics for now
     }
 
     public GameObject Create(string name, string role)
@@ -194,15 +188,15 @@ public class Game : MonoBehaviour
         p.setRole(role);
         p.setLocation(cities["Atlanta"]);
         cities["Atlanta"].getPlayers().Add(p);
-        p.setCards(null); //fix this later
+        p.setCards(new List<Card>()); //fix this
         p.setXBoard(xBoard);
         p.setYBoard(yBoard);
         p.setPlayer(obj);
         p.Activate();
         return obj;
     }
-    
-    public GameObject CreateCity(string name, string color, Dictionary<string,int> cubes, bool q, bool rs, int pop, int x, int y)
+
+    public GameObject CreateCity(string name, string color, Dictionary<string, int> cubes, bool q, bool rs, int pop, int x, int y)
     {
         GameObject obj = Instantiate(city, new Vector3(x, y, -2), Quaternion.identity);
         City c = obj.GetComponent<City>();
@@ -228,7 +222,7 @@ public class Game : MonoBehaviour
         Arrange(p.getLocation());//arrange the pawns around a city nicely
     }
 
-    
+
     public void Arrange(City c)
     {
         List<Pawn> ps = c.getPlayers();
@@ -247,7 +241,7 @@ public class Game : MonoBehaviour
             case 3:
                 ps[0].transform.position = new Vector3(x - 20, y, -2.0f);
                 ps[1].transform.position = new Vector3(x + 20, y, -2.0f);
-                ps[2].transform.position = new Vector3(x  + 20, y + 35, -2.0f);
+                ps[2].transform.position = new Vector3(x + 20, y + 35, -2.0f);
                 break;
             case 4:
                 ps[0].transform.position = new Vector3(x - 20, y, -2.0f);
@@ -258,13 +252,55 @@ public class Game : MonoBehaviour
         }
     }
 
-    public GameObject getCurrentPlayer()
+    //this function deals the players' hands
+    public void pregame_dealing()
     {
-        return currentPlayer;
-    }
-    public void setCurrentPlayer(GameObject p)
-    {
-        currentPlayer = p;
+        InitializeDecks();
+        List<Card> cdeck = getCitydeck();
+        List<GameObject> players = getPawns();
+        int n = players.Count;
+        if (n == 4)
+        {
+            foreach(GameObject player in players)
+            {
+                Pawn p = player.GetComponent<Pawn>();
+                Card card1 = cdeck[0]; 
+                cdeck.RemoveAt(0);
+                Card card2 = cdeck[0]; 
+                cdeck.RemoveAt(0);
+                p.setCards(new List<Card>() { card1, card2 });
+            }
+        }
+        else if (n == 3)
+        {
+            foreach (GameObject player in players)
+            {
+                Pawn p = player.GetComponent<Pawn>();
+                Card card1 = cdeck[0];
+                cdeck.RemoveAt(0);
+                Card card2 = cdeck[0];
+                cdeck.RemoveAt(0);
+                Card card3 = cdeck[0];
+                cdeck.RemoveAt(0);
+                p.setCards(new List<Card>() { card1, card2, card3 });
+            }
+        }
+        else
+        {
+            foreach (GameObject player in players)
+            {
+                Pawn p = player.GetComponent<Pawn>();
+                Card card1 = cdeck[0];
+                cdeck.RemoveAt(0);
+                Card card2 = cdeck[0];
+                cdeck.RemoveAt(0);
+                Card card3 = cdeck[0];
+                cdeck.RemoveAt(0);
+                Card card4 = cdeck[0];
+                cdeck.RemoveAt(0);
+                p.setCards(new List<Card>() { card1, card2, card3, card4 });
+            }
+        }
     }
 
     public bool IsGameOver()
@@ -282,15 +318,105 @@ public class Game : MonoBehaviour
         {
             turn += 1;
         }
-        setCurrentPlayer(pawns[turn - 1]); 
+        setCurrentPlayer(pawns[turn - 1]);
     }
 
     public void Update()
     {
         if (gameOver)
         {
-            gameOver = false; 
+            gameOver = false;
             SceneManager.LoadScene("Game");//start it over
         }
+    }
+    public GameObject getCurrentPlayer()
+    {
+        return currentPlayer;
+    }
+    public void setCurrentPlayer(GameObject p)
+    {
+        currentPlayer = p;
+    }
+
+    public List<GameObject> getPawns()
+    {
+        return pawns;
+    }
+    public void setPawns(List<GameObject> ps)
+    {
+        pawns = ps;
+    }
+    public List<GameObject> getDiseases()
+    {
+        return diseases;
+    }
+    public void setDiseases(List<GameObject> ds)
+    {
+        diseases = ds;
+    }
+    public Dictionary<string, City> getCities()
+    {
+        return cities;
+    }
+    public void setCities(Dictionary<string, City> cs)
+    {
+        cities = cs;
+    }
+    public void setTurn(int i)
+    {
+        turn = i;
+    }
+    public int getTurn()
+    {
+        return turn;
+    }
+    public void setAction(int i)
+    {
+        action = i;
+    }
+    public int getAction()
+    {
+        return action;
+    }
+    public void setCitydeck(List<Card> cd)
+    {
+        citydeck = cd;
+    }
+    public List<Card> getCitydeck()
+    {
+        return citydeck;
+    }
+    public void setCitydeckDiscard(List<Card> cdd)
+    {
+        citydeck_discard = cdd;
+    }
+    public List<Card> getCitydeckDiscard()
+    {
+        return citydeck_discard;
+    }
+    public void setInfectdeck(List<Card> id)
+    {
+        infectdeck = id;
+    }
+    public List<Card> getInfectdeck()
+    {
+        return infectdeck;
+    }
+    public void setInfectdeckDiscard(List<Card> idd)
+    {
+        infectdeck_discard = idd;
+    }
+    public List<Card> getInfectdeckDiscard()
+    {
+        return infectdeck_discard;
+
+    }
+    public void setEventcards(List<Card> ec)
+    {
+        eventcards = ec;
+    }
+    public List<Card> getEventcards()
+    {
+        return eventcards;
     }
 }

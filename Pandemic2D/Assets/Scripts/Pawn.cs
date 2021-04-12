@@ -21,7 +21,7 @@ public class Pawn : MonoBehaviour
     private City location; //you changed this to string to get past an error
     private string role;
     private string name;
-    private City[] cards;
+    private List<Card> cards;
 
     public float getXBoard()
     {
@@ -62,7 +62,7 @@ public class Pawn : MonoBehaviour
     {
         return role;
     }
-    public City[] getCards()
+    public List<Card> getCards()
     {
         return cards;
     }
@@ -74,7 +74,7 @@ public class Pawn : MonoBehaviour
     {
         location = c;
     }
-    public void setCards(City[] cs)
+    public void setCards(List<Card> cs)
     {
         cards = cs;
     }
