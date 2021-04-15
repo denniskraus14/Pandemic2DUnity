@@ -20,7 +20,7 @@ public class Game : MonoBehaviour
     public List<GameObject> pawns; //replacing players
     public List<GameObject> diseases; //replacing diseases - make a disease class
     public Dictionary<string, City> cities = new Dictionary<string, City>(); //replacing cities
-    public GameObject atlanta; //, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
+    public GameObject atlanta, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
     public List<Card> citydeck;
     public List<Card> citydeck_discard;
     public List<Card> infectdeck;
@@ -28,6 +28,7 @@ public class Game : MonoBehaviour
     public List<Card> eventcards;
     private GameObject currentPlayer;
     private bool gameOver = false;
+    public GameObject Card;
 
     // Start is called before the first frame update
     public void Start()
@@ -64,20 +65,39 @@ public class Game : MonoBehaviour
         }
         setCurrentPlayer(pawns[getTurn() - 1]);
         GameObject obj = Instantiate(atlanta, new Vector3(-445, 110, -2), Quaternion.identity); //research station
-                                                                                                //GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
-                                                                                                //GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
-                                                                                                //GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
-                                                                                                //obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
-                                                                                                //GameObject obj4 = Instantiate(disease2, new Vector3(-220, -355, -2), Quaternion.identity);
-                                                                                                //obj4.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
-                                                                                                //GameObject obj5 = Instantiate(disease3, new Vector3(-170, -355, -2), Quaternion.identity);
-                                                                                                //obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
-                                                                                                //GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
-                                                                                                //obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
+        GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
+        GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
+        GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
+        obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
+        GameObject obj4 = Instantiate(disease2, new Vector3(-220, -355, -2), Quaternion.identity);
+        obj4.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        GameObject obj5 = Instantiate(disease3, new Vector3(-170, -355, -2), Quaternion.identity);
+        obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
+        GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
+        obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
         InitializeDecks();//initialize decks
         pregame_dealing();
-        Instantiate();
+        display_cards();
+        
         //next infect the cities and properly prepare the cdeck w epidemics
+    }
+
+    public void display_cards()
+    {
+        int n = getPawns().Count;
+        if (n == 4){
+        Instantiate(Card, new Vector3(-920, 250, -2), Quaternion.identity); //what is the return type of instantiate()? you could use the setCard_Go() to link card to its gameobject if it return the GO
+        Instantiate(Card, new Vector3(-800, 250, -2), Quaternion.identity);
+        Instantiate(Card, new Vector3(-920, -250, -2), Quaternion.identity);
+        Instantiate(Card, new Vector3(-800, -250, -2), Quaternion.identity);
+        Instantiate(Card, new Vector3(820, 250, -2), Quaternion.identity);
+        Instantiate(Card, new Vector3(700, 250, -2), Quaternion.identity);
+        Instantiate(Card, new Vector3(820, -250, -2), Quaternion.identity);
+        Instantiate(Card, new Vector3(700, -250, -2), Quaternion.identity);
+
+    }else if(n==3){
+    }else{
+    }    
     }
 
     public void InitializeCities()
@@ -252,6 +272,17 @@ public class Game : MonoBehaviour
         }
     }
 
+    public void ArrangeCards(GameObject go)
+    {
+        //fuck - how to do this nicely? should all players' cards be displayed at once or should there be some sort of hand expansion? expansion is easier i think
+        //how to determine which cards (game objects) are associated with this player? don't want to delete and remake them all
+
+        //determine the number of players. determine which player the gameobject is (topleft, bottom right). make an array of positions to assign the cards to
+        Instantiate(Card, new Vector3(0, 0, -2), Quaternion.identity);
+        Instantiate(Card, new Vector3(0, -200, -2), Quaternion.identity);
+
+    }
+
     //this function deals the players' hands
     public void pregame_dealing()
     {
@@ -328,6 +359,41 @@ public class Game : MonoBehaviour
             gameOver = false;
             SceneManager.LoadScene("Game");//start it over
         }
+    }
+
+    public void draw_two()
+    {
+        GameObject go = getCurrentPlayer();
+        Pawn p = go.GetComponent<Pawn>();
+        List<Card> hand = p.getCards();
+        List<Card> cdeck = getCitydeck();
+        List<Card> cdeck_discard = getCitydeckDiscard();
+        Card c1 = cdeck[0];
+        cdeck.Remove(cdeck[0]);
+        Card c2 = cdeck[0];
+        cdeck.Remove(cdeck[0]);
+        if(c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic"))
+        {
+            cdeck_discard.Add(c1);
+            cdeck_discard.Add(c2);
+            setCitydeck(cdeck);
+            setCitydeckDiscard(cdeck_discard);
+            //call the double epidemic func
+        }else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic"))
+        {
+            hand.Add(c1);
+            cdeck_discard.Add(c2);
+            setCitydeckDiscard(cdeck_discard);
+            p.setCards(hand);
+            //call single epidemic func
+        }
+        else
+        {
+            hand.Add(c1);
+            hand.Add(c2);
+            p.setCards(hand);
+        }
+        ArrangeCards(go);
     }
     public GameObject getCurrentPlayer()
     {

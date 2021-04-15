@@ -174,13 +174,12 @@ public class City : MonoBehaviour
         controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction() + 1);
         if (controller.GetComponent<Game>().getAction()== 4)
         {
-            //draw two
+            controller.GetComponent<Game>().draw_two(); //draw two
             //discard to 7 and resolve epidemics
             //infect
-            //reset the actions
-            controller.GetComponent<Game>().setAction(0);
-            //make it the next person's turn
-            controller.GetComponent<Game>().NextTurn();
+            controller.GetComponent<Game>().setAction(0);            //reset the actions
+
+            controller.GetComponent<Game>().NextTurn();//make it the next person's turn
         }
         else ;//the turn just keeps going
         

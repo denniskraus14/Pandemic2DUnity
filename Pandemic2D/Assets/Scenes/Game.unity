@@ -260,7 +260,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: f78a60699d9decd428558e05f40b104c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 85c3e480d9a4e0343860d8fbd7639dee, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -280,7 +280,7 @@ Transform:
   m_GameObject: {fileID: 1147719311}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -83, y: 5, z: 0}
-  m_LocalScale: {x: 50, y: 50, z: 1}
+  m_LocalScale: {x: 100, y: 100, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -347,3 +347,9 @@ MonoBehaviour:
     type: 3}
   disease4: {fileID: 3634647044258614953, guid: 2185ad29869c78540bdebb7bcfcc872b,
     type: 3}
+  citydeck: []
+  citydeck_discard: []
+  infectdeck: []
+  infectdeck_discard: []
+  eventcards: []
+  Card: {fileID: 3361745425198513059, guid: 9ab53d18c6645f145a459ed5938b8c10, type: 3}
