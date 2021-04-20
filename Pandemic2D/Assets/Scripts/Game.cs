@@ -20,7 +20,7 @@ public class Game : MonoBehaviour
     public List<GameObject> pawns; //replacing players
     public List<GameObject> diseases; //replacing diseases - make a disease class
     public Dictionary<string, City> cities = new Dictionary<string, City>(); //replacing cities
-    public GameObject atlanta, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
+    public GameObject initial_station, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
     public List<Card> citydeck;
     public List<Card> citydeck_discard;
     public List<Card> infectdeck;
@@ -29,6 +29,10 @@ public class Game : MonoBehaviour
     private GameObject currentPlayer;
     private bool gameOver = false;
     public GameObject Card;
+    //public Sprite atlanta_cd,chicago_cd,newyork_cd,montreal_cd,sf_cd,madrid_cd,london_cd,essen_cd,paris_cd,stp_cd,milan_cd,washington_cd;
+    //public Sprite miami_cd, mexicocity_cd, la_cd, bogota_cd, lima_cd, santiago_cd, saopaolo_cd, buenosaires_cd, lagos_cd, kinshasa_cd, khartoum_cd, johannesburg_cd;
+    //public Sprite cairo_cd, algiers_cd, istanbul_cd, baghdad_cd, moscow_cd, tehran_cd, riyadh_cd, karachi_cd, kolkatta_cd, delhi_cd, mumbai_cd, chennai_cd;
+    //public Sprite shanghai_cd, tokyo_cd, beijing_cd, seoul_cd, osaka_cd, taipei_cd, hongkong_cd, bangkok_cd, hcmc_cd, jakarta_cd, manilla_cd, sydney_cd;
 
     // Start is called before the first frame update
     public void Start()
@@ -64,7 +68,7 @@ public class Game : MonoBehaviour
             SetPosition(temp); //make the pawn show up
         }
         setCurrentPlayer(pawns[getTurn() - 1]);
-        GameObject obj = Instantiate(atlanta, new Vector3(-445, 110, -2), Quaternion.identity); //research station
+        GameObject obj = Instantiate(initial_station, new Vector3(-445, 110, -2), Quaternion.identity); //research station
         GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
         GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
         GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
@@ -85,16 +89,22 @@ public class Game : MonoBehaviour
     public void display_cards()
     {
         int n = getPawns().Count;
+        System.Random random = new System.Random();
         if (n == 4){
-        Instantiate(Card, new Vector3(-920, 250, -2), Quaternion.identity); //what is the return type of instantiate()? you could use the setCard_Go() to link card to its gameobject if it return the GO
-        Instantiate(Card, new Vector3(-800, 250, -2), Quaternion.identity);
-        Instantiate(Card, new Vector3(-920, -250, -2), Quaternion.identity);
-        Instantiate(Card, new Vector3(-800, -250, -2), Quaternion.identity);
-        Instantiate(Card, new Vector3(820, 250, -2), Quaternion.identity);
-        Instantiate(Card, new Vector3(700, 250, -2), Quaternion.identity);
-        Instantiate(Card, new Vector3(820, -250, -2), Quaternion.identity);
-        Instantiate(Card, new Vector3(700, -250, -2), Quaternion.identity);
-
+            foreach(GameObject go in getPawns())
+            {
+                Pawn p = go.GetComponent<Pawn>();
+                foreach(Card c in p.getCards())
+                {
+                    String name = c.getName();
+                    //name.Replace(@"\s+", "");
+                    name = name.Replace(" ", String.Empty);
+                    var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
+                    Instantiate(Card, new Vector3(random.Next(-400,400), random.Next(-300,300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
+                    Thread.Sleep(1); //ensure the random generator is producing diferent coordinates
+                }
+            }
+            
     }else if(n==3){
     }else{
     }    
@@ -183,17 +193,13 @@ public class Game : MonoBehaviour
             temp.Add(new Card(kvp.Key));
             temp2.Add(new Card(kvp.Key));
         }
-        setEventcards(new List<Card>() {new Card("Airlift", false),
-                                        new Card("Government Grant", false),
-                                        new Card("Resilient Population", false),
-                                        new Card("One Quiet Night", false),
-                                        new Card("Forecast", false)});
+        setEventcards(new List<Card>() {new Card("Airlift", false),new Card("Government Grant", false),new Card("Resilient Population", false),new Card("One Quiet Night", false),new Card("Forecast", false)});
         foreach(Card c in getEventcards())
         {
             temp.Add(c);
-            temp.Add(new Card("Epidemic"));
+            //temp.Add(new Card("Epidemic"));
         }
-        temp.Add(new Card("Epidemic")); //assume 6 epidemics for now
+        //temp.Add(new Card("Epidemic")); //assume 6 epidemics for now
     }
 
     public GameObject Create(string name, string role)
@@ -272,14 +278,13 @@ public class Game : MonoBehaviour
         }
     }
 
-    public void ArrangeCards(GameObject go)
+    public void ArrangeCards()
     {
         //fuck - how to do this nicely? should all players' cards be displayed at once or should there be some sort of hand expansion? expansion is easier i think
         //how to determine which cards (game objects) are associated with this player? don't want to delete and remake them all
 
         //determine the number of players. determine which player the gameobject is (topleft, bottom right). make an array of positions to assign the cards to
-        Instantiate(Card, new Vector3(0, 0, -2), Quaternion.identity);
-        Instantiate(Card, new Vector3(0, -200, -2), Quaternion.identity);
+        
 
     }
 
@@ -287,7 +292,9 @@ public class Game : MonoBehaviour
     public void pregame_dealing()
     {
         InitializeDecks();
-        List<Card> cdeck = getCitydeck();
+        List<Card> cdeck = getCitydeck(); //shuffle this
+        System.Random random = new System.Random();
+        cdeck = cdeck.OrderBy(c => random.Next()).ToList();
         List<GameObject> players = getPawns();
         int n = players.Count;
         if (n == 4)
@@ -332,6 +339,13 @@ public class Game : MonoBehaviour
                 p.setCards(new List<Card>() { card1, card2, card3, card4 });
             }
         }
+        cdeck.Add(new Card("Epidemic")); //add in appropriate epidemics after dealing the intitial hands
+        cdeck.Add(new Card("Epidemic"));
+        cdeck.Add(new Card("Epidemic"));
+        cdeck.Add(new Card("Epidemic"));
+        cdeck.Add(new Card("Epidemic"));
+        cdeck.Add(new Card("Epidemic")); // STILL need to split these among 6 piles
+        ArrangeCards();
     }
 
     public bool IsGameOver()
@@ -363,6 +377,7 @@ public class Game : MonoBehaviour
 
     public void draw_two()
     {
+        System.Random random = new System.Random();
         GameObject go = getCurrentPlayer();
         Pawn p = go.GetComponent<Pawn>();
         List<Card> hand = p.getCards();
@@ -379,12 +394,29 @@ public class Game : MonoBehaviour
             setCitydeck(cdeck);
             setCitydeckDiscard(cdeck_discard);
             //call the double epidemic func
+            //do you want to instantiate them both in the discard pile?
         }else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic"))
         {
             hand.Add(c1);
             cdeck_discard.Add(c2);
             setCitydeckDiscard(cdeck_discard);
             p.setCards(hand);
+            String name = c1.getName();
+            name = name.Replace(" ", String.Empty);
+            var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
+            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite;
+            //call single epidemic func
+        }
+        else if (c1.getName().Equals("Epidemic") && !c2.getName().Equals("Epidemic"))
+        {
+            hand.Add(c2);
+            cdeck_discard.Add(c1);
+            setCitydeckDiscard(cdeck_discard);
+            p.setCards(hand);
+            String name = c2.getName();
+            name = name.Replace(" ", String.Empty);
+            var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
+            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite;
             //call single epidemic func
         }
         else
@@ -392,8 +424,18 @@ public class Game : MonoBehaviour
             hand.Add(c1);
             hand.Add(c2);
             p.setCards(hand);
+            String name = c1.getName();
+            String name2 = c2.getName();
+            //name.Replace(@"\s+", "");
+            name = name.Replace(" ", String.Empty);
+            name2 = name2.Replace(" ", String.Empty);
+            var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
+            var sprite2 = Resources.Load<Sprite>(name2); //ensure all cities are spelled the same. also check caps
+            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite;
+            Thread.Sleep(1); //ensure the random generator is producing diferent coordinates
+            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite2; 
         }
-        ArrangeCards(go);
+        ArrangeCards();
     }
     public GameObject getCurrentPlayer()
     {

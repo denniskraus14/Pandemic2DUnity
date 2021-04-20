@@ -6,7 +6,7 @@ MonoImporter:
   defaultReferences:
   - pawn: {fileID: 2760558533714810909, guid: 75de4b5c198a9bc458fda0276b5eba73, type: 3}
   - city: {fileID: 274286607533099521, guid: a4ad0c1d65a75ff459f8d6125fea88b7, type: 3}
-  - atlanta: {fileID: 7272709962819576834, guid: 1f933bb9c94d23f49ae30edffe37a5b4,
+  - initial_station: {fileID: 7272709962819576834, guid: 1f933bb9c94d23f49ae30edffe37a5b4,
       type: 3}
   - outbreak_counter: {fileID: 5658229027013568454, guid: a0cf26b84813a34419c14db258382d7a,
       type: 3}

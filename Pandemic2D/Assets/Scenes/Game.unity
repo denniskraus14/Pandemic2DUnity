@@ -334,7 +334,8 @@ MonoBehaviour:
   action: 0
   pawns: []
   diseases: []
-  atlanta: {fileID: 7272709962819576834, guid: 1f933bb9c94d23f49ae30edffe37a5b4, type: 3}
+  initial_station: {fileID: 7272709962819576834, guid: 1f933bb9c94d23f49ae30edffe37a5b4,
+    type: 3}
   outbreak_counter: {fileID: 5658229027013568454, guid: a0cf26b84813a34419c14db258382d7a,
     type: 3}
   infect_counter: {fileID: 8646632823889380655, guid: e8065345cd2775f40813547c9498f926,
