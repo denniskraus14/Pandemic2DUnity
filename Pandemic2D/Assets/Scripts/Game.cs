@@ -16,7 +16,7 @@ public class Game : MonoBehaviour
 
     public int turn = 1;
     public int action = 0;
-    public List<GameObject> pawns; //replacing players
+    public List<GameObject> pawns; //replacing players dict
     public List<GameObject> diseases; //replacing diseases - make a disease class
     public Dictionary<string, City> cities = new Dictionary<string, City>(); //replacing cities
     public GameObject initial_station, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
@@ -105,7 +105,7 @@ public class Game : MonoBehaviour
                     var sprite = Resources.Load<Sprite>(name2); //ensure all cities are spelled the same. also check caps
                     GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
                     temp.GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
-                    temp.name = name+"Card";
+                    temp.name = name2+"Card";
                     Thread.Sleep(1); //ensure the random generator is producing diferent coordinates
                 }
             }
@@ -287,30 +287,33 @@ public class Game : MonoBehaviour
         }
     }
 
+    //clean this up
     public void ArrangeCards()
     {
-        //determine the number of players. determine which player the gameobject is (topleft, bottom right). make an array of positions to assign the cards to
         foreach(GameObject go in getPawns())
         {
             Pawn p = go.GetComponent<Pawn>();
             int turn = p.getOrder();
             List<Card> cs = p.getCards();
             float hspace = 80;
+            float vspace = 100;
+
             if (turn==1)
             {
                 //top left
                 float x = -1000.0f;
-                float y = 200.0f;
-                int i = 0;
+                float y = 300.0f;
+                int i = 1;
             
                 foreach(Card c in cs)
                 {
-                    Card card = GameObject.Find(c.getName()+"Card").GetComponent<Card>();
+                    String name = c.getName().Replace(" ", String.Empty);
+                    Card card = GameObject.Find(name+"Card").GetComponent<Card>();
                     card.transform.position = new Vector3(x, y, -2);
                     x = x + hspace;
-                    if (i == 3)
+                    if (i%3==0)
                     {
-                        y = y - 100.0f;
+                        y = y - vspace;
                         x = -1000.0f;
                     }
                     i = i + 1;
@@ -319,17 +322,19 @@ public class Game : MonoBehaviour
             {
                 //top right
                 float x = 600.0f;
-                float y = 200.0f;
-                int i = 0;
+                float y = 300.0f;
+                int i = 1;
 
                 foreach (Card c in cs)
                 {
-                    Card card = GameObject.Find(c.getName() + "Card").GetComponent<Card>();
+                    String name = c.getName().Replace(" ", String.Empty);
+
+                    Card card = GameObject.Find(name + "Card").GetComponent<Card>();
                     card.transform.position = new Vector3(x, y, -2);
                     x = x + hspace;
-                    if (i == 3)
+                    if (i % 3==0)
                     {
-                        y = y - 100.0f;
+                        y = y - vspace;
                         x = 600.0f;
                     }
                     i = i + 1;
@@ -341,16 +346,17 @@ public class Game : MonoBehaviour
                 //bottom right
                 float x = 600.0f;
                 float y = -200.0f;
-                int i = 0;
+                int i = 1;
 
                 foreach (Card c in cs)
                 {
-                    Card card = GameObject.Find(c.getName() + "Card").GetComponent<Card>();
+                    String name = c.getName().Replace(" ", String.Empty);
+                    Card card = GameObject.Find(name+ "Card").GetComponent<Card>();
                     card.transform.position = new Vector3(x, y, -2);
                     x = x + hspace;
-                    if (i == 3)
+                    if (i%3 == 0)
                     {
-                        y = y - 100.0f;
+                        y = y - vspace;
                         x = 600.0f;
 
                     }
@@ -362,16 +368,17 @@ public class Game : MonoBehaviour
                 //bottom left
                 float x = -1000.0f;
                 float y = -200.0f;
-                int i = 0;
+                int i = 1;
 
                 foreach (Card c in cs)
                 {
-                    Card card = GameObject.Find(c.getName() + "Card").GetComponent<Card>();
+                    String name = c.getName().Replace(" ", String.Empty);
+                    Card card = GameObject.Find(name + "Card").GetComponent<Card>();
                     card.transform.position = new Vector3(x, y, -2);
                     x = x + hspace;
-                    if (i == 3)
+                    if (i %3== 0)
                     {
-                        y = y - 100.0f;
+                        y = y - vspace;
                         x = -1000.0f;
                     }
                     i = i + 1;
@@ -386,7 +393,8 @@ public class Game : MonoBehaviour
         InitializeDecks();
         List<Card> cdeck = getCitydeck(); //shuffle this
         System.Random random = new System.Random();
-        cdeck = cdeck.OrderBy(c => random.Next()).ToList();
+        setCitydeck(cdeck.OrderBy(c => random.Next()).ToList());
+        cdeck = getCitydeck(); //shuffled
         List<GameObject> players = getPawns();
         int n = players.Count;
         if (n == 4)
@@ -495,7 +503,9 @@ public class Game : MonoBehaviour
             String name = c1.getName();
             name = name.Replace(" ", String.Empty);
             var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
-            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite;
+            GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+            temp.GetComponent<SpriteRenderer>().sprite = sprite;
+            temp.name = name + "Card";
             //call single epidemic func
         }
         else if (c1.getName().Equals("Epidemic") && !c2.getName().Equals("Epidemic"))
@@ -507,7 +517,9 @@ public class Game : MonoBehaviour
             String name = c2.getName();
             name = name.Replace(" ", String.Empty);
             var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
-            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite;
+            GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+            temp.GetComponent<SpriteRenderer>().sprite = sprite;
+            temp.name = name+"Card";
             //call single epidemic func
         }
         else
@@ -522,9 +534,13 @@ public class Game : MonoBehaviour
             name2 = name2.Replace(" ", String.Empty);
             var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
             var sprite2 = Resources.Load<Sprite>(name2); //ensure all cities are spelled the same. also check caps
-            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite;
+            GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+            temp.GetComponent<SpriteRenderer>().sprite = sprite;
+            temp.name = name+"Card";
             Thread.Sleep(1); //ensure the random generator is producing diferent coordinates
-            Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite2; 
+            GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+            temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
+            temp2.name = name2+"Card";
         }
         ArrangeCards();
     }

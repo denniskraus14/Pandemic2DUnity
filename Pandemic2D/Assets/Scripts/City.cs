@@ -163,9 +163,9 @@ public class City : MonoBehaviour
         else
         {
             player.DestroyMovePlates();//destroy the moveplates
-            player.setXBoard(0.0f);
-            player.setYBoard(0.0f); //this will tell you when a city move is invalid
-            player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+            //player.setXBoard(0.0f);
+            //player.setYBoard(0.0f); //this will tell you when a city move is invalid
+            //player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
         }
     }
     public void ActionSpent()
