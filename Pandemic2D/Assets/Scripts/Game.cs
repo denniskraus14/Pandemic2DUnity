@@ -14,7 +14,6 @@ public class Game : MonoBehaviour
     public GameObject pawn;
     public GameObject city;
 
-
     public int turn = 1;
     public int action = 0;
     public List<GameObject> pawns; //replacing players
@@ -29,10 +28,6 @@ public class Game : MonoBehaviour
     private GameObject currentPlayer;
     private bool gameOver = false;
     public GameObject Card;
-    //public Sprite atlanta_cd,chicago_cd,newyork_cd,montreal_cd,sf_cd,madrid_cd,london_cd,essen_cd,paris_cd,stp_cd,milan_cd,washington_cd;
-    //public Sprite miami_cd, mexicocity_cd, la_cd, bogota_cd, lima_cd, santiago_cd, saopaolo_cd, buenosaires_cd, lagos_cd, kinshasa_cd, khartoum_cd, johannesburg_cd;
-    //public Sprite cairo_cd, algiers_cd, istanbul_cd, baghdad_cd, moscow_cd, tehran_cd, riyadh_cd, karachi_cd, kolkatta_cd, delhi_cd, mumbai_cd, chennai_cd;
-    //public Sprite shanghai_cd, tokyo_cd, beijing_cd, seoul_cd, osaka_cd, taipei_cd, hongkong_cd, bangkok_cd, hcmc_cd, jakarta_cd, manilla_cd, sydney_cd;
 
     // Start is called before the first frame update
     public void Start()
@@ -64,21 +59,30 @@ public class Game : MonoBehaviour
                 case "ContingencyPlanner": temp.GetComponent<SpriteRenderer>().color = new Color(.05f, .52f, .79f, 1.0f); break;
                 case "OperationsExpert": temp.GetComponent<SpriteRenderer>().color = new Color(.286f, .87f, .35f, 1.0f); break;
             }
+            temp.GetComponent<Pawn>().setOrder(i); //why is this assigning them all the same turn
             pawns.Add(temp);
             SetPosition(temp); //make the pawn show up
         }
+        //pawns[getTurn() - 1].GetComponent<Pawn>().setTurn(getTurn()-1);
         setCurrentPlayer(pawns[getTurn() - 1]);
         GameObject obj = Instantiate(initial_station, new Vector3(-445, 110, -2), Quaternion.identity); //research station
         GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
         GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
         GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
         obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
+        obj3.name = "Yellow Disease";
         GameObject obj4 = Instantiate(disease2, new Vector3(-220, -355, -2), Quaternion.identity);
         obj4.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
+        obj4.name = "Red Disease";
+
         GameObject obj5 = Instantiate(disease3, new Vector3(-170, -355, -2), Quaternion.identity);
         obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
+        obj5.name = "Blue Disease";
+
         GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
         obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
+        obj6.name = "Black Disease";
+
         InitializeDecks();//initialize decks
         pregame_dealing();
         display_cards();
@@ -97,18 +101,21 @@ public class Game : MonoBehaviour
                 foreach(Card c in p.getCards())
                 {
                     String name = c.getName();
-                    //name.Replace(@"\s+", "");
-                    name = name.Replace(" ", String.Empty);
-                    var sprite = Resources.Load<Sprite>(name); //ensure all cities are spelled the same. also check caps
-                    Instantiate(Card, new Vector3(random.Next(-400,400), random.Next(-300,300), -3), Quaternion.identity).GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
+                    String name2 = name.Replace(" ", String.Empty);
+                    var sprite = Resources.Load<Sprite>(name2); //ensure all cities are spelled the same. also check caps
+                    GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+                    temp.GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
+                    temp.name = name+"Card";
                     Thread.Sleep(1); //ensure the random generator is producing diferent coordinates
                 }
             }
             
     }else if(n==3){
     }else{
-    }    
     }
+    ArrangeCards();
+    }
+
 
     public void InitializeCities()
     {
@@ -219,6 +226,7 @@ public class Game : MonoBehaviour
         p.setYBoard(yBoard);
         p.setPlayer(obj);
         p.Activate();
+        obj.name = role;
         return obj;
     }
 
@@ -237,6 +245,7 @@ public class Game : MonoBehaviour
         //c.setConnections(connections);
         c.setPlayers(new List<Pawn>()); //set city to have no players in it initially
         c.Activate(name);
+        obj.name = name;
         return obj;
     }
 
@@ -280,12 +289,95 @@ public class Game : MonoBehaviour
 
     public void ArrangeCards()
     {
-        //fuck - how to do this nicely? should all players' cards be displayed at once or should there be some sort of hand expansion? expansion is easier i think
-        //how to determine which cards (game objects) are associated with this player? don't want to delete and remake them all
-
         //determine the number of players. determine which player the gameobject is (topleft, bottom right). make an array of positions to assign the cards to
-        
+        foreach(GameObject go in getPawns())
+        {
+            Pawn p = go.GetComponent<Pawn>();
+            int turn = p.getOrder();
+            List<Card> cs = p.getCards();
+            float hspace = 80;
+            if (turn==1)
+            {
+                //top left
+                float x = -1000.0f;
+                float y = 200.0f;
+                int i = 0;
+            
+                foreach(Card c in cs)
+                {
+                    Card card = GameObject.Find(c.getName()+"Card").GetComponent<Card>();
+                    card.transform.position = new Vector3(x, y, -2);
+                    x = x + hspace;
+                    if (i == 3)
+                    {
+                        y = y - 100.0f;
+                        x = -1000.0f;
+                    }
+                    i = i + 1;
+                }
+            }else if (turn == 2)
+            {
+                //top right
+                float x = 600.0f;
+                float y = 200.0f;
+                int i = 0;
 
+                foreach (Card c in cs)
+                {
+                    Card card = GameObject.Find(c.getName() + "Card").GetComponent<Card>();
+                    card.transform.position = new Vector3(x, y, -2);
+                    x = x + hspace;
+                    if (i == 3)
+                    {
+                        y = y - 100.0f;
+                        x = 600.0f;
+                    }
+                    i = i + 1;
+                }
+
+            }
+            else if (turn == 3)
+            {
+                //bottom right
+                float x = 600.0f;
+                float y = -200.0f;
+                int i = 0;
+
+                foreach (Card c in cs)
+                {
+                    Card card = GameObject.Find(c.getName() + "Card").GetComponent<Card>();
+                    card.transform.position = new Vector3(x, y, -2);
+                    x = x + hspace;
+                    if (i == 3)
+                    {
+                        y = y - 100.0f;
+                        x = 600.0f;
+
+                    }
+                    i = i + 1;
+                }
+            }
+            else
+            {
+                //bottom left
+                float x = -1000.0f;
+                float y = -200.0f;
+                int i = 0;
+
+                foreach (Card c in cs)
+                {
+                    Card card = GameObject.Find(c.getName() + "Card").GetComponent<Card>();
+                    card.transform.position = new Vector3(x, y, -2);
+                    x = x + hspace;
+                    if (i == 3)
+                    {
+                        y = y - 100.0f;
+                        x = -1000.0f;
+                    }
+                    i = i + 1;
+                }
+            }
+        }
     }
 
     //this function deals the players' hands
@@ -345,7 +437,6 @@ public class Game : MonoBehaviour
         cdeck.Add(new Card("Epidemic"));
         cdeck.Add(new Card("Epidemic"));
         cdeck.Add(new Card("Epidemic")); // STILL need to split these among 6 piles
-        ArrangeCards();
     }
 
     public bool IsGameOver()

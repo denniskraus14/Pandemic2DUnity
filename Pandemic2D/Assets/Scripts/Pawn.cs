@@ -22,6 +22,16 @@ public class Pawn : MonoBehaviour
     private string role;
     private string name;
     private List<Card> cards;
+    private int order;
+
+    public int getOrder()
+    {
+        return order;
+    }
+    public void setOrder(int t)
+    {
+        order=t;
+    }
 
     public float getXBoard()
     {
