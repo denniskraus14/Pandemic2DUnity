@@ -136,7 +136,7 @@ public class Game : MonoBehaviour
             5582000,3888000, 14900000,0,0
         };
         List<Tuple<int, int>> locations = new List<Tuple<int, int>>() {
-        new Tuple<int,int>(-445,100),new Tuple<int,int>(-477,167), new Tuple<int,int>(-397,168),new Tuple<int,int>(-582,136),new Tuple<int,int>(-334,160),new Tuple<int,int>(-187,125),
+        new Tuple<int,int>(-445,100),new Tuple<int,int>(-477,173), new Tuple<int,int>(-397,168),new Tuple<int,int>(-582,136),new Tuple<int,int>(-334,160),new Tuple<int,int>(-187,125),
         new Tuple<int,int>(-177,208),new Tuple<int,int>(-97,222),new Tuple<int,int>(-114,164),new Tuple<int,int>(-60,183),new Tuple<int,int>(-3,238),new Tuple<int,int>(-360,107),
         new Tuple<int,int>(-397,30),new Tuple<int,int>(-560,50), new Tuple<int,int>(-487,20),new Tuple<int,int>(-395,-50),new Tuple<int,int>(-290,-150),new Tuple<int,int>(-435,-140),
         new Tuple<int,int>(-420,-220),new Tuple<int,int>(-330,-205),new Tuple<int,int>(-123,-36),new Tuple<int,int>(-69,-97),new Tuple<int,int>(-17,-20),new Tuple<int,int>(-20,-175),
