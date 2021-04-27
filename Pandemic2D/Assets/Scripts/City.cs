@@ -19,8 +19,28 @@ public class City : MonoBehaviour
     private int population;
     private List<Pawn> players;
     private List<City> connections;
+    public GameObject cube;
 
-    public Sprite red_city, blue_city, yellow_city, black_city;
+    public Sprite citysprite;
+
+    public Sprite getSprite()
+    {
+        return citysprite;
+    }
+
+    public void setCitysprite(Sprite s)
+    {
+        citysprite = s;
+    }
+
+    public GameObject getCube()
+    {
+        return cube;
+    }
+    public void setCube(GameObject c)
+    {
+        cube = c;
+    }
 
     public string getName()
     {
@@ -113,39 +133,32 @@ public class City : MonoBehaviour
         //take the instantiated location and adjust the transform
         SetCoords(); //everyone would start in atlanta
         this.name = name;
+        Sprite c;
         switch (this.color)
         {
-            case "black": this.GetComponent<SpriteRenderer>().sprite = black_city; break;
-            case "blue": this.GetComponent<SpriteRenderer>().sprite = blue_city; break;
-            case "red": this.GetComponent<SpriteRenderer>().sprite = red_city; break;
-            case "yellow": this.GetComponent<SpriteRenderer>().sprite = yellow_city; break;
+            case "black":  c = Resources.Load<Sprite>("black_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
+                break;
+            case "blue":  c = Resources.Load<Sprite>("blue_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
+                break;
+            case "red":  c = Resources.Load<Sprite>("red_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
+                break;
+            case "yellow":  c = Resources.Load<Sprite>("yellow_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
+                break;
         }
     }
 
     public void SetCoords()
-    {//get cities to their positions?
-        /*
-        float x = xBoard;
-        float y = yBoard;
-
-        x *= .66f;
-        y *= .66f;
-
-        x += -2.3f;
-        y += -2.3f;
-
-        this.transform.position = new Vector3(x, y, -2.0f);*/
+    {
     }
 
     public void OnMouseUp()
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
-        //make sure this city is a valid one to go to
         GameObject obj = controller.GetComponent<Game>().getCurrentPlayer();
         Pawn player = obj.GetComponent<Pawn>();
         City loc = player.getLocation();
         List<City> neis = loc.connections;
-        if (neis.Contains(this))
+        if (neis.Contains(this))         //make sure this city is a valid one to go to
         {
             loc.getPlayers().Remove(player);
             player.DestroyMovePlates();//destroy the moveplates
@@ -181,7 +194,6 @@ public class City : MonoBehaviour
             //discard to 7 and resolve epidemics (later lol)
             controller.GetComponent<Game>().infect_step();
             controller.GetComponent<Game>().setAction(0);            //reset the actions
-
             controller.GetComponent<Game>().NextTurn();//make it the next person's turn
         }
         else ;//the turn just keeps going

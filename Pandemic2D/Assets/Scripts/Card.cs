@@ -24,7 +24,4 @@ public class Card : MonoBehaviour
     {
         stored = s;
     }
-
-    public void Start() { }
-    public void Update() { }
 }

@@ -16,7 +16,7 @@ public class Pawn : MonoBehaviour
     private GameObject player;
 
     //refs for all the sprites of chess pieces
-    public Sprite Dispatcher, Medic, Researcher, Scientist, QuarantineSpecialist, ContingencyPlanner, OperationsExpert;
+    public Sprite pawnsprite;
     
     private City location; //you changed this to string to get past an error
     private string role;
@@ -95,17 +95,7 @@ public class Pawn : MonoBehaviour
     public void Activate()
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
-        //take the instantiated location and adjust the transform
-        switch (this.role)
-        {
-            case "Dispatcher": this.GetComponent<SpriteRenderer>().sprite = Dispatcher; break;
-            case "Medic": this.GetComponent<SpriteRenderer>().sprite = Medic; break;
-            case "Researcher": this.GetComponent<SpriteRenderer>().sprite = Researcher; break;
-            case "Scientist": this.GetComponent<SpriteRenderer>().sprite = Scientist; break;
-            case "QuarantineSpecialist": this.GetComponent<SpriteRenderer>().sprite = QuarantineSpecialist; break;
-            case "ContingencyPlanner": this.GetComponent<SpriteRenderer>().sprite = ContingencyPlanner; break;
-            case "OperationsExpert": this.GetComponent<SpriteRenderer>().sprite = OperationsExpert; break;
-        }
+        this.GetComponent<SpriteRenderer>().sprite = pawnsprite;
     }
 
     private void OnMouseUp() {

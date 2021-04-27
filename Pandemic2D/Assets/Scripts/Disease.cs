@@ -25,7 +25,7 @@ public class Disease : MonoBehaviour
     {
         return cubes;
     }
-    public void set Color(string c)
+    public void setColor(string c)
     {
         color = c;
     }

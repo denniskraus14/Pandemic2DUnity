@@ -94,7 +94,7 @@ public class Game : MonoBehaviour
     public void display_cards()
     {
         int n = getPawns().Count;
-        System.Random random = new System.Random();
+        //System.Random random = new System.Random();
         if (n == 4){
             foreach(GameObject go in getPawns())
             {
@@ -104,10 +104,10 @@ public class Game : MonoBehaviour
                     String name = c.getName();
                     String name2 = name.Replace(" ", String.Empty);
                     var sprite = Resources.Load<Sprite>(name2); //ensure all cities are spelled the same. also check caps
-                    GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
-                    temp.GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
+                    GameObject temp = Instantiate(Card, new Vector3(0, 0, -3), Quaternion.identity);
+                    temp.GetComponent<SpriteRenderer>().sprite = sprite; 
                     temp.name = name2+"Card";
-                    Thread.Sleep(1); //ensure the random generator is producing diferent coordinates
+                    //Thread.Sleep(1); //ensure the rng is producing diferent coordinates
                 }
             }
             
@@ -208,6 +208,8 @@ public class Game : MonoBehaviour
             //temp.Add(new Card("Epidemic"));
         }
         //temp.Add(new Card("Epidemic")); //assume 6 epidemics for now
+        System.Random random = new System.Random();
+        setInfectdeck(temp2.OrderBy(c => random.Next()).ToList());
     }
 
     public GameObject Create(string name, string role)
@@ -237,6 +239,10 @@ public class Game : MonoBehaviour
         City c = obj.GetComponent<City>();
         c.setName(name);
         c.setColor(color);
+        cubes["red"] = 0; //this will initialize every city to have 0 cubes
+        cubes["black"] = 0; //this will initialize every city to have 0 cubes
+        cubes["blue"] = 0; //this will initialize every city to have 0 cubes
+        cubes["yellow"] = 0; //this will initialize every city to have 0 cubes
         c.setCubes(cubes);
         c.setQuarantined(q); //fix this later
         c.setResearchStation(rs);
@@ -556,29 +562,44 @@ public class Game : MonoBehaviour
             Card c = ideck[0]; //take the top card
             ideck.Remove(c); //remove it from one deck
             ideck_discard.Add(c); //add it to the discard deck
-            //display it
             String name = c.getName();
             String name2 = name.Replace(" ", String.Empty);
             var sprite = Resources.Load<Sprite>(name2+"EC"); //ensure all cities are spelled the same. also check caps
             GameObject temp = Instantiate(Card, new Vector3(120.0f, 315.0f, -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
             temp.name = name2 + "InfectCard";
-            Thread.Sleep(2000); //2 sec pause
-            place_cube();//place one cube
-            //display the cube
+            //how to get city color from card? link card to city?
+            City c2 = getCities()[name2]; 
+            place_cube(c2, 1, c2.getColor(),new List<City>());//place one cube
+            display_cubes(c2);//display the number of cubes at that city, color it
             //resolve outbreaks
             //did you lose?
             i++;
         }
     }
 
-    public void place_cubes(string city, int cubes, string color, List<City> outbreakchain)
+    public void place_cube(City c, int cubes, string color, List<City> outbreakchain)
     {
-        City c = GameObject.Find(city).GetComponent<City>();
-        int current = c.getCubes()[city];
-        if(current+cubes > 3 && c.getQuarantined()==false && !outbreakchain.Contains(c))
+        //City c = GameObject.Find(city).GetComponent<City>();
+        Dictionary<string, int> temp = c.getCubes();
+        int current = temp[c.getColor()];
+        temp[c.getColor()] = current + 1;//do this for now
+        c.setCubes(temp);
+        /*if(current+cubes > 3 && c.getQuarantined()==false && !outbreakchain.Contains(c))
         {
+            ;
+        }*/
+    }
 
+    public void display_cubes(City c) {
+        int current = c.getCubes()[c.getColor()];
+        GameObject cs = Instantiate(c.getCube(), new Vector3(c.getXBoard(),c.getYBoard(), -2), Quaternion.identity);
+        switch (current)
+        {
+            case 3: Sprite s = Resources.Load<Sprite>("3.png"); cs.GetComponent<SpriteRenderer>().sprite = s; break;
+            case 2: Sprite s2 = Resources.Load<Sprite>("2.jpg"); cs.GetComponent<SpriteRenderer>().sprite = s2; break;
+            case 1: Sprite s3 = Resources.Load<Sprite>("1.png"); cs.GetComponent<SpriteRenderer>().sprite = s3; break;
+            case 0: Sprite s4 = Resources.Load<Sprite>("x.png"); cs.GetComponent<SpriteRenderer>().sprite = s4; break; 
         }
     }
 
