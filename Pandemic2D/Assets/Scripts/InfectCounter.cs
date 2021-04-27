@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class InfectCounter : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private int count = 2;
+
+    //this method would be called when epidemic cards are drawn
+    public void setCount(int c)
     {
-        
+        count = c;
     }
 
-    // Update is called once per frame
-    void Update()
+    //this method would be called to in the infect_step() to find out how many cards to draw
+    public int getCount()
     {
-        
+        return count;
     }
 }

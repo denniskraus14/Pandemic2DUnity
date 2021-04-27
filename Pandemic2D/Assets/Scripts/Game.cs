@@ -67,6 +67,7 @@ public class Game : MonoBehaviour
         setCurrentPlayer(pawns[getTurn() - 1]);
         GameObject obj = Instantiate(initial_station, new Vector3(-445, 110, -2), Quaternion.identity); //research station
         GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
+        obj1.name = "Infect Rate";
         GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
         GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
         obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
@@ -544,6 +545,43 @@ public class Game : MonoBehaviour
         }
         ArrangeCards();
     }
+
+    public void infect_step()
+    {
+        int num = GameObject.Find("Infect Rate").GetComponent<InfectCounter>().getCount();
+        List<Card> ideck = getInfectdeck();
+        List<Card> ideck_discard = getInfectdeckDiscard();
+        int i = 0;
+        while (i <num){
+            Card c = ideck[0]; //take the top card
+            ideck.Remove(c); //remove it from one deck
+            ideck_discard.Add(c); //add it to the discard deck
+            //display it
+            String name = c.getName();
+            String name2 = name.Replace(" ", String.Empty);
+            var sprite = Resources.Load<Sprite>(name2+"EC"); //ensure all cities are spelled the same. also check caps
+            GameObject temp = Instantiate(Card, new Vector3(120.0f, 315.0f, -3), Quaternion.identity);
+            temp.GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
+            temp.name = name2 + "InfectCard";
+            Thread.Sleep(2000); //2 sec pause
+            place_cube();//place one cube
+            //display the cube
+            //resolve outbreaks
+            //did you lose?
+            i++;
+        }
+    }
+
+    public void place_cubes(string city, int cubes, string color, List<City> outbreakchain)
+    {
+        City c = GameObject.Find(city).GetComponent<City>();
+        int current = c.getCubes()[city];
+        if(current+cubes > 3 && c.getQuarantined()==false && !outbreakchain.Contains(c))
+        {
+
+        }
+    }
+
     public GameObject getCurrentPlayer()
     {
         return currentPlayer;

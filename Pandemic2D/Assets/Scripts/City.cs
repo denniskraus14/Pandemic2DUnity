@@ -168,6 +168,9 @@ public class City : MonoBehaviour
             //player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
         }
     }
+
+    //this checks if 4 actions have happened and sets off a chain of events
+    //this could be changed later to give the user more control. (when to play event cards for example)
     public void ActionSpent()
     {
         //increase the action counter
@@ -175,8 +178,8 @@ public class City : MonoBehaviour
         if (controller.GetComponent<Game>().getAction()== 4)
         {
             controller.GetComponent<Game>().draw_two(); //draw two
-            //discard to 7 and resolve epidemics
-            //infect
+            //discard to 7 and resolve epidemics (later lol)
+            controller.GetComponent<Game>().infect_step();
             controller.GetComponent<Game>().setAction(0);            //reset the actions
 
             controller.GetComponent<Game>().NextTurn();//make it the next person's turn

@@ -4,15 +4,41 @@ using UnityEngine;
 
 public class Disease : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    string color;
+    bool cured;
+    bool eradicated;
+    int cubes;
 
-    // Update is called once per frame
-    void Update()
+    public string getColor()
     {
-        
+        return color;
+    }
+    public bool getCured()
+    {
+        return cured;
+    }
+    public bool getEradicated()
+    {
+        return eradicated;
+    }
+    public int getCubes()
+    {
+        return cubes;
+    }
+    public void set Color(string c)
+    {
+        color = c;
+    }
+    public void setCured(bool b)
+    {
+        cured = b;
+    }
+    public void setEradicated(bool e)
+    {
+        eradicated = e;
+    }
+    public void setCubes(int c)
+    {
+        cubes = c;
     }
 }
