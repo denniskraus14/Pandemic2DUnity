@@ -569,7 +569,7 @@ public class Game : MonoBehaviour
             temp.GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
             temp.name = name2 + "InfectCard";
             //how to get city color from card? link card to city?
-            City c2 = getCities()[name2]; 
+            City c2 = getCities()[name]; 
             place_cube(c2, 1, c2.getColor(),new List<City>());//place one cube
             display_cubes(c2);//display the number of cubes at that city, color it
             //resolve outbreaks
@@ -591,15 +591,38 @@ public class Game : MonoBehaviour
         }*/
     }
 
+    //clean this up
     public void display_cubes(City c) {
         int current = c.getCubes()[c.getColor()];
-        GameObject cs = Instantiate(c.getCube(), new Vector3(c.getXBoard(),c.getYBoard(), -2), Quaternion.identity);
-        switch (current)
-        {
-            case 3: Sprite s = Resources.Load<Sprite>("3.png"); cs.GetComponent<SpriteRenderer>().sprite = s; break;
-            case 2: Sprite s2 = Resources.Load<Sprite>("2.jpg"); cs.GetComponent<SpriteRenderer>().sprite = s2; break;
-            case 1: Sprite s3 = Resources.Load<Sprite>("1.png"); cs.GetComponent<SpriteRenderer>().sprite = s3; break;
-            case 0: Sprite s4 = Resources.Load<Sprite>("x.png"); cs.GetComponent<SpriteRenderer>().sprite = s4; break; 
+        GameObject cs = Instantiate(c.getCube(), new Vector3(c.getXBoard(),c.getYBoard()-15, -2), Quaternion.identity);
+        if (current == 3) { 
+            var s = Resources.Load<Sprite>("3");
+            SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
+            sr.sprite = s;
+            sr.color = Color.red;
+            cs.transform.localScale = new Vector3(10, 10, 1);
+        }
+        else if (current == 2) { 
+            var s2 = Resources.Load<Sprite>("2");
+            SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
+            sr.sprite = s2;
+            sr.color = Color.yellow;
+            cs.transform.localScale = new Vector3(10, 10, 1);
+
+        }
+        else if (current == 1) { 
+            var s3 = Resources.Load<Sprite>("1");
+            SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
+            sr.sprite = s3;
+            sr.color = Color.green;
+            cs.transform.localScale = new Vector3(10, 10, 1);
+
+        }
+        else { 
+            var s4 = Resources.Load<Sprite>("x"); 
+            cs.GetComponent<SpriteRenderer>().sprite = s4;
+            cs.transform.localScale = new Vector3(10, 10, 1);
+
         }
     }
 
