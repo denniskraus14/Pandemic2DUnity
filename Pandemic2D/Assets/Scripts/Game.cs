@@ -27,6 +27,7 @@ public class Game : MonoBehaviour
     public List<Card> eventcards;
     private GameObject currentPlayer;
     private bool gameOver = false;
+    private int outbreaks;
     public GameObject Card;
 
     // Start is called before the first frame update
@@ -87,8 +88,54 @@ public class Game : MonoBehaviour
         InitializeDecks();//initialize decks
         pregame_dealing();
         display_cards();
-        
+        pregame_city_deck_prep(6); //assume 6 for now
         //next infect the cities and properly prepare the cdeck w epidemics
+    }
+
+    public void pregame_city_deck_prep(int piles)
+    {
+        System.Random random = new System.Random();
+        int p = getPawns().Count;
+        List<Card> cdeck = getCitydeck();
+        setCitydeck(cdeck.OrderBy(c => random.Next()).ToList());
+        List<int> sublist_lengths = null;
+        if (p==4 || p==2){
+            if (piles == 4) { sublist_lengths = new List<int> { 11, 11, 11, 12 }; }
+            else if(piles == 5){ sublist_lengths = new List<int> {9,9,9,9,9}; }
+            else { sublist_lengths = new List<int> { 8, 8, 8, 7, 7, 7 }; }
+        }
+        else
+        {
+            if (piles == 4) { sublist_lengths = new List<int> { 10,10,11,11 }; }
+            else if (piles == 5) { sublist_lengths = new List<int> { 8,8,8, 9, 9 }; }
+            else { sublist_lengths = new List<int> { 7,7,7, 7, 7, 7 }; }
+        }
+        List<List<Card>> subdecks = new List<List<Card>>();
+        int i = 0;
+        int start = 0;
+        while (i < piles)
+        {
+            List<Card> subdeck = cdeck.GetRange(start,start+sublist_lengths[i]); //check if the range is off by one or something
+            subdecks.Add(subdeck);
+            start = start + subdeck.Count;
+            i += 1;
+        }
+        int index = 0;
+        while (index < piles){
+            subdecks[index].Add(new Card("Epidemic"));
+            subdecks[index].OrderBy(c => random.Next()).ToList();
+            index += 1;
+        }
+        cdeck = new List<Card>(); //empty it
+        subdecks.OrderBy(s =>random.Next()).ToList();
+        while(subdecks.Count>0)
+        {
+            foreach (Card card in subdecks[0])
+            {
+                cdeck.Add(card);
+                subdecks.Remove(subdecks[0]);
+            }
+        }
     }
 
     public void display_cards()
@@ -249,7 +296,6 @@ public class Game : MonoBehaviour
         c.setPopulation(pop);
         c.setXBoard(x);
         c.setYBoard(y);
-        //c.setConnections(connections);
         c.setPlayers(new List<Pawn>()); //set city to have no players in it initially
         c.Activate(name);
         obj.name = name;
@@ -260,7 +306,6 @@ public class Game : MonoBehaviour
     public void SetPosition(GameObject obj)
     {
         Pawn p = obj.GetComponent<Pawn>();
-        //pawns.Add(obj);
         Arrange(p.getLocation());//arrange the pawns around a city nicely
     }
 
@@ -572,23 +617,50 @@ public class Game : MonoBehaviour
             City c2 = getCities()[name]; 
             place_cube(c2, 1, c2.getColor(),new List<City>());//place one cube
             display_cubes(c2);//display the number of cubes at that city, color it
-            //resolve outbreaks
-            //did you lose?
             i++;
         }
     }
 
     public void place_cube(City c, int cubes, string color, List<City> outbreakchain)
     {
-        //City c = GameObject.Find(city).GetComponent<City>();
         Dictionary<string, int> temp = c.getCubes();
         int current = temp[c.getColor()];
-        temp[c.getColor()] = current + 1;//do this for now
-        c.setCubes(temp);
-        /*if(current+cubes > 3 && c.getQuarantined()==false && !outbreakchain.Contains(c))
+
+        //temp[c.getColor()] = current + 1;////do this for now
+        //c.setCubes(temp);
+
+        List<GameObject> ds = getDiseases();
+        //find the correct disease to subtract cubes from
+        Disease disease = null; 
+        foreach(GameObject d in ds){
+            if (d.GetComponent<Disease>().getColor().Equals(color)){
+                disease = d.GetComponent<Disease>();}
+        }
+        if(current+cubes > 3 && c.getQuarantined()==false && !outbreakchain.Contains(c))
         {
-            ;
-        }*/
+            disease.setCubes(disease.getCubes() - 3 - temp[color]);//subtract the amount of cubes to get to 3
+            setOutbreaks(getOutbreaks()+1); //add one to the counter
+            //move the outbreak counter sprite
+            temp[color] = 3;
+            c.setCubes(temp);
+            outbreakchain.Add(c);
+            resolve_outbreak(c, outbreakchain, color);
+        }
+        else if (outbreakchain.Contains(c)){;} //avoid outbreak cycles
+        else if (c.getQuarantined()){;} //avoid quarantined cities
+        else
+        {
+            disease.setCubes(disease.getCubes()-cubes);
+            temp[color] = temp[color] + cubes;
+            c.setCubes(temp);
+        }
+    }
+
+    public void resolve_outbreak(City c, List<City> outbreakchain, string color){
+        List<City> connections = c.getConnections();
+        List<City> acc = new List<City>();
+        foreach(City connection in connections){acc.Add(connection);}
+        foreach(City c2 in acc) { place_cube(c2,1,color,outbreakchain); display_cubes(c2); }
     }
 
     //clean this up
@@ -715,5 +787,13 @@ public class Game : MonoBehaviour
     public List<Card> getEventcards()
     {
         return eventcards;
+    }
+    public void setOutbreaks(int c)
+    {
+        outbreaks = c;
+    }
+    public int getOutbreaks()
+    {
+        return outbreaks;
     }
 }

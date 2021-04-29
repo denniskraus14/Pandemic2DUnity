@@ -193,6 +193,7 @@ public class City : MonoBehaviour
             controller.GetComponent<Game>().draw_two(); //draw two
             //discard to 7 and resolve epidemics (later lol)
             controller.GetComponent<Game>().infect_step();
+            //did you lose? check outbreaks and cube counts
             controller.GetComponent<Game>().setAction(0);            //reset the actions
             controller.GetComponent<Game>().NextTurn();//make it the next person's turn
         }
