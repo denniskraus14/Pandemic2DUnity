@@ -95,7 +95,7 @@ public class Game : MonoBehaviour
     public void pregame_city_deck_prep(int piles)
     {
         System.Random random = new System.Random();
-        int p = getPawns().Count;
+        int p = getPawns().Count; //4
         List<Card> cdeck = getCitydeck();
         setCitydeck(cdeck.OrderBy(c => random.Next()).ToList());
         List<int> sublist_lengths = null;
@@ -113,15 +113,15 @@ public class Game : MonoBehaviour
         List<List<Card>> subdecks = new List<List<Card>>();
         int i = 0;
         int start = 0;
-        while (i < piles)
+        while (i < piles-1) //shoud these be -1?
         {
-            List<Card> subdeck = cdeck.GetRange(start,start+sublist_lengths[i]); //check if the range is off by one or something
+            List<Card> subdeck = cdeck.GetRange(start, sublist_lengths[i]);
             subdecks.Add(subdeck);
             start = start + subdeck.Count;
             i += 1;
         }
         int index = 0;
-        while (index < piles){
+        while (index < piles-1){
             subdecks[index].Add(new Card("Epidemic"));
             subdecks[index].OrderBy(c => random.Next()).ToList();
             index += 1;
@@ -133,8 +133,8 @@ public class Game : MonoBehaviour
             foreach (Card card in subdecks[0])
             {
                 cdeck.Add(card);
-                subdecks.Remove(subdecks[0]);
             }
+            subdecks.Remove(subdecks[0]);
         }
     }
 
