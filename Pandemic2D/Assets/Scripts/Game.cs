@@ -73,18 +73,21 @@ public class Game : MonoBehaviour
         GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
         obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
         obj3.name = "Yellow Disease";
+        obj3.GetComponent<Disease>().setColor("yellow");
         GameObject obj4 = Instantiate(disease2, new Vector3(-220, -355, -2), Quaternion.identity);
         obj4.GetComponent<SpriteRenderer>().color = new Color(1.0f, 0.0f, 0.0f, 1.0f);
         obj4.name = "Red Disease";
-
+        obj4.GetComponent<Disease>().setColor("red");
         GameObject obj5 = Instantiate(disease3, new Vector3(-170, -355, -2), Quaternion.identity);
         obj5.GetComponent<SpriteRenderer>().color = new Color(0.0f, 0.0f, 1.0f, 1.0f);
         obj5.name = "Blue Disease";
-
+        obj5.GetComponent<Disease>().setColor("blue");
         GameObject obj6 = Instantiate(disease4, new Vector3(-120, -355, -2), Quaternion.identity);
         obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
         obj6.name = "Black Disease";
-
+        obj6.GetComponent<Disease>().setColor("black");
+        List<GameObject> acc = new List<GameObject>() { obj3,obj4,obj5,obj6};
+        setDiseases(acc);
         InitializeDecks();//initialize decks
         pregame_dealing();
         display_cards();
@@ -117,17 +120,14 @@ public class Game : MonoBehaviour
         {
             List<Card> subdeck = cdeck.GetRange(start, sublist_lengths[i]);
             subdecks.Add(subdeck);
-            start = start + subdeck.Count;
+            start = start + sublist_lengths[i]; //is this right
+            //i += 1;
+            subdecks[i].Add(new Card("Epidemic"));
+            subdecks[i] = subdecks[i].OrderBy(c => random.Next()).ToList();
             i += 1;
         }
-        int index = 0;
-        while (index < piles-1){
-            subdecks[index].Add(new Card("Epidemic"));
-            subdecks[index].OrderBy(c => random.Next()).ToList();
-            index += 1;
-        }
         cdeck = new List<Card>(); //empty it
-        subdecks.OrderBy(s =>random.Next()).ToList();
+        subdecks = subdecks.OrderBy(s =>random.Next()).ToList();
         while(subdecks.Count>0)
         {
             foreach (Card card in subdecks[0])
@@ -136,6 +136,7 @@ public class Game : MonoBehaviour
             }
             subdecks.Remove(subdecks[0]);
         }
+        setCitydeck(cdeck);
     }
 
     public void display_cards()
@@ -254,9 +255,10 @@ public class Game : MonoBehaviour
             temp.Add(c);
             //temp.Add(new Card("Epidemic"));
         }
-        //temp.Add(new Card("Epidemic")); //assume 6 epidemics for now
         System.Random random = new System.Random();
         setInfectdeck(temp2.OrderBy(c => random.Next()).ToList());
+        Thread.Sleep(1);
+        setCitydeck(temp.OrderBy(c => random.Next()).ToList());
     }
 
     public GameObject Create(string name, string role)
@@ -491,12 +493,12 @@ public class Game : MonoBehaviour
                 p.setCards(new List<Card>() { card1, card2, card3, card4 });
             }
         }
-        cdeck.Add(new Card("Epidemic")); //add in appropriate epidemics after dealing the intitial hands
-        cdeck.Add(new Card("Epidemic"));
-        cdeck.Add(new Card("Epidemic"));
-        cdeck.Add(new Card("Epidemic"));
-        cdeck.Add(new Card("Epidemic"));
-        cdeck.Add(new Card("Epidemic")); // STILL need to split these among 6 piles
+        //cdeck.Add(new Card("Epidemic")); //add in appropriate epidemics after dealing the intitial hands
+        //cdeck.Add(new Card("Epidemic"));
+        //cdeck.Add(new Card("Epidemic"));
+        //cdeck.Add(new Card("Epidemic"));
+        //cdeck.Add(new Card("Epidemic"));
+        //cdeck.Add(new Card("Epidemic")); // STILL need to split these among 6 piles
     }
 
     public bool IsGameOver()
@@ -589,7 +591,6 @@ public class Game : MonoBehaviour
             GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite;
             temp.name = name+"Card";
-            Thread.Sleep(1); //ensure the random generator is producing diferent coordinates
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
             temp2.name = name2+"Card";
