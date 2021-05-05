@@ -29,6 +29,8 @@ public class Game : MonoBehaviour
     private bool gameOver = false;
     private int outbreaks;
     public GameObject Card;
+    public GameObject cube;
+
 
     // Start is called before the first frame update
     public void Start()
@@ -224,7 +226,7 @@ public class Game : MonoBehaviour
             new List<City>(){ cities["Essen"], cities["Madrid"], cities["New York"], cities["Paris" ]},new List<City>(){ cities["Milan"], cities["London"], cities["St. Petersburg"], cities["Paris" ]},new List<City>(){ cities["Madrid"], cities["Milan"], cities["London"], cities["Essen"], cities["Algiers"] },new List<City>(){ cities["Essen"], cities["Paris"], cities["Istanbul"]},new List<City>(){ cities["Istanbul"], cities["Moscow"], cities["Essen"] },new List<City>(){ cities["Atlanta"], cities["New York"], cities["Montreal"], cities["Miami"] },
             new List<City>(){ cities["Atlanta"], cities["Bogota"], cities["Washington"], cities["Mexico City"] },new List<City>(){ cities["San Francisco"], cities["Mexico City"], cities["Sydney"], cities["Chicago"] },new List<City>(){ cities["Los Angeles"], cities["Bogota"], cities["Lima"], cities["Miami"], cities["Chicago"] },new List<City>(){ cities["Mexico City"], cities["Buenos Aires"], cities["Sao Paolo"], cities["Miami"], cities["Lima"] },new List<City>(){ cities["Bogota"], cities["Madrid"], cities["Buenos Aires"], cities["Lagos" ]},new List<City>(){ cities["Bogota"], cities["Mexico City"], cities["Santiago"]},
             new List<City>(){ cities["Lima"]},new List<City>(){ cities["Sao Paolo"], cities["Bogota"]},new List<City>(){ cities["Sao Paolo"], cities["Khartoum"], cities["Kinshasa"] },new List<City>(){ cities["Lagos"], cities["Johannesburg"], cities["Khartoum"]},new List<City>(){ cities["Cairo"], cities["Lagos"], cities["Kinshasa"], cities["Johannesburg"] },new List<City>(){ cities["Khartoum"], cities["Kinshasa"] },
-            new List<City>(){ cities["Istanbul"], cities["Cairo"], cities["Madrid"], cities["Paris"] },new List<City>(){ cities["Baghdad"], cities["Cairo"], cities["Moscow"], cities["St. Petersburg"], cities["Algiers"] },new List<City>(){ cities["Istanbul"], cities["St. Petersburg"], cities["Tehran"] },new List<City>(){ cities["Delhi"], cities["Moscow"], cities["Karachi"], cities["Baghdad"] },new List<City>(){ cities["Istanbul"], cities["Karachi"], cities["Cairo"], cities["Riyadh"], cities["Tehran"]},new List<City>(){ cities["Cairo"], cities["Karachi"], cities["Baghdad"]},
+            new List<City>(){ cities["Istanbul"], cities["Cairo"], cities["Madrid"], cities["Paris"] },new List<City>(){ cities["Baghdad"], cities["Cairo"], cities["Moscow"], cities["St. Petersburg"], cities["Algiers"], cities["Milan"] },new List<City>(){ cities["Istanbul"], cities["St. Petersburg"], cities["Tehran"] },new List<City>(){ cities["Delhi"], cities["Moscow"], cities["Karachi"], cities["Baghdad"] },new List<City>(){ cities["Istanbul"], cities["Karachi"], cities["Cairo"], cities["Riyadh"], cities["Tehran"]},new List<City>(){ cities["Cairo"], cities["Karachi"], cities["Baghdad"]},
             new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Delhi"], cities["Riyadh"], cities["Baghdad"]},new List<City>(){ cities["Mumbai"], cities["Tehran"], cities["Kolkatta"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Delhi"], cities["Chennai"], cities["Karachi"]},new List<City>(){ cities["Baghdad"], cities["Istanbul"], cities["Khartoum"], cities["Riyadh"], cities["Algiers"]},new List<City>(){ cities["Mumbai"], cities["Delhi"], cities["Jakarta"], cities["Kolkatta"], cities["Bangkok"]},new List<City>(){ cities["Delhi"], cities["Bangkok"], cities["Hong Kong"], cities["Chennai"]},
             new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Los Angeles"]},new List<City>(){ cities["Taipei"], cities["Ho Chi Minh City"], cities["Hong Kong"], cities["Sydney"], cities["San Francisco"] },new List<City>(){ cities["Bangkok"], cities["Sydney"], cities["Chennai"], cities["Ho Chi Minh City"]},new List<City>(){ cities["Jakarta"], cities["Manilla"], cities["Bangkok"], cities["Hong Kong"] },new List<City>(){ cities["Bangkok"], cities["Manilla"], cities["Kolkatta"], cities["Shanghai"], cities["Ho Chi Minh City"], cities["Taipei"] },new List<City>(){ cities["Kolkatta"], cities["Jakarta"], cities["Ho Chi Minh City"], cities["Chennai"], cities["Hong Kong"]},
             new List<City>(){ cities["Osaka"], cities["Shanghai"], cities["Manilla"], cities["Hong Kong"] },new List<City>(){ cities["Tokyo"], cities["Taipei"] },new List<City>(){ cities["Seoul"], cities["Shanghai"] },new List<City>(){ cities["Tokyo"], cities["Shanghai"], cities["Beijing"]},new List<City>(){ cities["Osaka"], cities["Seoul"], cities["Shanghai"], cities["San Francisco"]},new List<City>(){ cities["Seoul"], cities["Tokyo"], cities["Beijing"], cities["Hong Kong"], cities["Taipei"]},
@@ -253,7 +255,6 @@ public class Game : MonoBehaviour
         foreach(Card c in getEventcards())
         {
             temp.Add(c);
-            //temp.Add(new Card("Epidemic"));
         }
         System.Random random = new System.Random();
         setInfectdeck(temp2.OrderBy(c => random.Next()).ToList());
@@ -386,14 +387,13 @@ public class Game : MonoBehaviour
                     Card card = GameObject.Find(name + "Card").GetComponent<Card>();
                     card.transform.position = new Vector3(x, y, -2);
                     x = x + hspace;
-                    if (i % 3==0)
+                    if (i % 3 == 0)
                     {
                         y = y - vspace;
                         x = 600.0f;
                     }
                     i = i + 1;
                 }
-
             }
             else if (turn == 3)
             {
@@ -493,12 +493,6 @@ public class Game : MonoBehaviour
                 p.setCards(new List<Card>() { card1, card2, card3, card4 });
             }
         }
-        //cdeck.Add(new Card("Epidemic")); //add in appropriate epidemics after dealing the intitial hands
-        //cdeck.Add(new Card("Epidemic"));
-        //cdeck.Add(new Card("Epidemic"));
-        //cdeck.Add(new Card("Epidemic"));
-        //cdeck.Add(new Card("Epidemic"));
-        //cdeck.Add(new Card("Epidemic")); // STILL need to split these among 6 piles
     }
 
     public bool IsGameOver()
@@ -546,9 +540,22 @@ public class Game : MonoBehaviour
             cdeck_discard.Add(c2);
             setCitydeck(cdeck);
             setCitydeckDiscard(cdeck_discard);
-            //call the double epidemic func
+            var sprite = Resources.Load<Sprite>("Epidemic"); //ensure all cities are spelled the same. also check caps
+            GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+            GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+
+            temp.GetComponent<SpriteRenderer>().sprite = sprite;
+            temp2.GetComponent<SpriteRenderer>().sprite = sprite;
+
+            temp.name = "EpidemicCard";
+            temp2.name = "EpidemicCard";
             //do you want to instantiate them both in the discard pile?
-        }else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic"))
+
+            temp.GetComponent<Card>().transform.position = new Vector3(100,-280,-3);
+            temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
+            //call the double epidemic func
+        }
+        else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic"))
         {
             hand.Add(c1);
             cdeck_discard.Add(c2);
@@ -560,7 +567,13 @@ public class Game : MonoBehaviour
             GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite;
             temp.name = name + "Card";
+            var sprite2 = Resources.Load<Sprite>("Epidemic"); //ensure all cities are spelled the same. also check caps
+            GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+            temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
+            temp2.name = "EpidemicCard";
+            temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
             //call single epidemic func
+            epidemic();
         }
         else if (c1.getName().Equals("Epidemic") && !c2.getName().Equals("Epidemic"))
         {
@@ -574,7 +587,13 @@ public class Game : MonoBehaviour
             GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite;
             temp.name = name+"Card";
+            var sprite2 = Resources.Load<Sprite>("Epidemic"); //ensure all cities are spelled the same. also check caps
+            GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
+            temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
+            temp2.name = "EpidemicCard";
+            temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
             //call single epidemic func
+            epidemic();
         }
         else
         {
@@ -663,41 +682,66 @@ public class Game : MonoBehaviour
         foreach(City connection in connections){acc.Add(connection);}
         foreach(City c2 in acc) { place_cube(c2,1,color,outbreakchain); display_cubes(c2); }
     }
+    public void epidemic() {
+        //get infectcounter object and change the count attribute. change its position
+        List<Card> ideck = getInfectdeck();
+        List<Card> ideckdiscard = getInfectdeckDiscard();
+        Card last = ideck[ideck.Count - 1]; //last card
+        ideck.Remove(last);
+        ideckdiscard.Add(last);
+        City city = getCities()[last.getName()];
+        place_cube(city,3,city.getColor(),new List<City>());//put 3 cubes on the bottom card
+        display_cubes(city);
+        System.Random random = new System.Random();
+        ideckdiscard.OrderBy(c=>random.Next()).ToList();
+        setInfectdeck(infectdeck_discard.Concat(ideck).ToList());//place infeckdeckdiscard on top of infectdeck
+        setInfectdeckDiscard(new List<Card>());//empty infectdeckdiscard
+        //(infect is then called normally)
+    }
 
     //clean this up
-    public void display_cubes(City c) {
+    public void display_cubes(City c)
+    {
         int current = c.getCubes()[c.getColor()];
-        GameObject cs = Instantiate(c.getCube(), new Vector3(c.getXBoard(),c.getYBoard()-15, -2), Quaternion.identity);
-        if (current == 3) { 
+        try
+        {
+            c.getCube().GetComponent<SpriteRenderer>().sprite = null;
+        }
+        catch { }
+        GameObject cs = Instantiate(cube, new Vector3(c.getXBoard(), c.getYBoard() - 15, -2), Quaternion.identity);
+        SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
+        if (current == 3)
+        {
             var s = Resources.Load<Sprite>("3");
-            SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
             sr.sprite = s;
             sr.color = Color.red;
-            cs.transform.localScale = new Vector3(10, 10, 1);
+            cs.transform.localScale = new Vector3(2, 2, 1);
         }
-        else if (current == 2) { 
+        else if (current == 2)
+        {
             var s2 = Resources.Load<Sprite>("2");
-            SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
             sr.sprite = s2;
             sr.color = Color.yellow;
-            cs.transform.localScale = new Vector3(10, 10, 1);
+            cs.transform.localScale = new Vector3(3, 3, 1);
 
         }
-        else if (current == 1) { 
+        else if (current == 1)
+        {
             var s3 = Resources.Load<Sprite>("1");
-            SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
             sr.sprite = s3;
             sr.color = Color.green;
             cs.transform.localScale = new Vector3(10, 10, 1);
 
         }
-        else { 
-            var s4 = Resources.Load<Sprite>("x"); 
+        else
+        {
+            var s4 = Resources.Load<Sprite>("x");
             cs.GetComponent<SpriteRenderer>().sprite = s4;
-            cs.transform.localScale = new Vector3(10, 10, 1);
-
+            cs.transform.localScale = new Vector3(5, 5, 1);
         }
+        c.setCube(cs);
     }
+
 
     public GameObject getCurrentPlayer()
     {

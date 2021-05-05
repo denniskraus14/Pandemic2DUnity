@@ -20,7 +20,6 @@ public class City : MonoBehaviour
     private List<Pawn> players;
     private List<City> connections;
     public GameObject cube;
-
     public Sprite citysprite;
 
     public Sprite getSprite()

@@ -21,6 +21,7 @@ MonoImporter:
   - disease4: {fileID: 3634647044258614953, guid: 2185ad29869c78540bdebb7bcfcc872b,
       type: 3}
   - Card: {fileID: 3361745425198513059, guid: 9ab53d18c6645f145a459ed5938b8c10, type: 3}
+  - cube: {fileID: 6180049687186426045, guid: ab6af2fc45f8d364598c827ad514947d, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
