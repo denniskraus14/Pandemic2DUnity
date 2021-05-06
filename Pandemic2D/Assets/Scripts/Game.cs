@@ -812,7 +812,20 @@ public class Game : MonoBehaviour
         }
         c.setCube(cs);
     }
-
+    public void quarantine_passive() {
+        GameObject go = GameObject.Find("QuarantineSpecialist");
+        Pawn p = go.GetComponent<Pawn>();
+        City c = p.getLocation();
+        foreach (KeyValuePair<string, City> kvp in cities)
+        {
+            kvp.Value.setQuarantined(false);//reset them all in case quarantined was moved
+        }
+        foreach (City con in c.getConnections())
+        {
+            con.setQuarantined(true);
+        }
+        c.setQuarantined(true);
+    }
 
     public GameObject getCurrentPlayer()
     {

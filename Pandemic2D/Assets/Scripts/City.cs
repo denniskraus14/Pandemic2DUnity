@@ -14,7 +14,7 @@ public class City : MonoBehaviour
     private string name;
     private string color;
     private Dictionary<string, int> cubes;
-    private bool quarantined = false;
+    private bool quarantined;
     private bool research_station = false;
     private int population;
     private List<Pawn> players;
@@ -189,6 +189,7 @@ public class City : MonoBehaviour
         controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction() + 1);
         if (controller.GetComponent<Game>().getAction()== 4)
         {
+            controller.GetComponent<Game>().quarantine_passive(); //reset this
             controller.GetComponent<Game>().draw_two(); //draw two
             //discard to 7 and resolve epidemics (later lol)
             controller.GetComponent<Game>().infect_step();
