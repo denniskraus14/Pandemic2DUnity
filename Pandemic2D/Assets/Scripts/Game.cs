@@ -562,7 +562,7 @@ public class Game : MonoBehaviour
             resolve_epidemic();
             resolve_epidemic();//infect is then called normally
         }
-        else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic"))
+        else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic")) 
         {
             hand.Add(c1);
             cdeck_discard.Add(c2);
