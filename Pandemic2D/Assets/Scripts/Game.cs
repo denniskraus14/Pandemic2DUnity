@@ -824,7 +824,7 @@ public class Game : MonoBehaviour
         {
             con.setQuarantined(true);
         }
-        c.setQuarantined(true);
+        c.setQuarantined(true); 
     }
 
     public GameObject getCurrentPlayer()
