@@ -28,6 +28,7 @@ public class Game : MonoBehaviour
     private GameObject currentPlayer;
     private bool gameOver = false;
     private int outbreaks;
+    private int infectrate;
     public GameObject Card;
     public GameObject cube;
 
@@ -41,6 +42,8 @@ public class Game : MonoBehaviour
         int n = 4; //assume 4 for now
         List<string> names = new List<string>() { "Dennis", "Dad", "Gram", "Oreo", "Dhhyey", "Zach", "Kathleen", "Eric", "Claus", "Claus's Wife" };
         List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert" };
+        setOutbreaks(0);
+        
         //set all piece positions on the board (Atlanta)
         var random = new System.Random();
         for (int i = 1; i <= n; i++)
@@ -70,8 +73,10 @@ public class Game : MonoBehaviour
         setCurrentPlayer(pawns[getTurn() - 1]);
         GameObject obj = Instantiate(initial_station, new Vector3(-445, 110, -2), Quaternion.identity); //research station
         GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
-        obj1.name = "Infect Rate";
+        obj1.name = "InfectCounter";
+        obj1.GetComponent<InfectCounter>().setIndex(0);
         GameObject obj2 = Instantiate(outbreak_counter, new Vector3(-590, -45, -2), Quaternion.identity);
+        obj2.name = "OutbreakCounter";
         GameObject obj3 = Instantiate(disease1, new Vector3(-280, -355, -2), Quaternion.identity);
         obj3.GetComponent<SpriteRenderer>().color = new Color(1.0f,1.0f,0.0f,1.0f);
         obj3.name = "Yellow Disease";
@@ -515,6 +520,7 @@ public class Game : MonoBehaviour
 
     public void Update()
     {
+        GameObject.Find("OutbreakCounter").GetComponent<OutbreakCounter>().setCount(getOutbreaks());
         if (gameOver)
         {
             gameOver = false;
@@ -619,7 +625,7 @@ public class Game : MonoBehaviour
 
     public void infect_step()
     {
-        int num = GameObject.Find("Infect Rate").GetComponent<InfectCounter>().getCount();
+        int num = GameObject.Find("InfectCounter").GetComponent<InfectCounter>().getRate();
         List<Card> ideck = getInfectdeck();
         List<Card> ideck_discard = getInfectdeckDiscard();
         int i = 0;
@@ -677,13 +683,16 @@ public class Game : MonoBehaviour
     }
 
     public void resolve_outbreak(City c, List<City> outbreakchain, string color){
+        move_outbreakcounter();
         List<City> connections = c.getConnections();
         List<City> acc = new List<City>();
         foreach(City connection in connections){acc.Add(connection);}
         foreach(City c2 in acc) { place_cube(c2,1,color,outbreakchain); display_cubes(c2); }
     }
     public void epidemic() {
-        //get infectcounter object and change the count attribute. change its position
+        InfectCounter ic = GameObject.Find("InfectCounter").GetComponent<InfectCounter>();
+        ic.setIndex(ic.getIndex()+1); //increase the rate sprite
+        move_infectcounter(); //get infectcounter object and change its position
         List<Card> ideck = getInfectdeck();
         List<Card> ideckdiscard = getInfectdeckDiscard();
         Card last = ideck[ideck.Count - 1]; //last card
@@ -699,6 +708,68 @@ public class Game : MonoBehaviour
         //(infect is then called normally)
     }
 
+    public void move_outbreakcounter()
+    {
+        Update(); //manually call it?
+        GameObject go = GameObject.Find("OutbreakCounter");
+        OutbreakCounter oc = go.GetComponent<OutbreakCounter>();
+        switch (oc.getCount()){
+            case 0:
+                break;
+            case 1: 
+                oc.transform.position = new Vector3(-545,-80,-2.0f); //decrement by 45,35
+                break;
+            case 2:
+                oc.transform.position = new Vector3(-590, -115, -2.0f); //decrement by 45,35
+                break;
+            case 3:
+                oc.transform.position = new Vector3(-545, -150, -2.0f); //decrement by 45,35
+                break;
+            case 4:
+                oc.transform.position = new Vector3(-590, -185, -2.0f); //decrement by 45,35
+                break;
+            case 5:
+                oc.transform.position = new Vector3(-545, -220, -2.0f); //decrement by 45,35
+                break;
+            case 6:
+                oc.transform.position = new Vector3(-590, -255, -2.0f); //decrement by 45,35
+                break;
+            case 7:
+                oc.transform.position = new Vector3(-545, -290, -2.0f); //decrement by 45,35
+                break;
+            case 8:
+                oc.transform.position = new Vector3(-590, -325, -2.0f); //decrement by 45,35
+                break;
+        }
+    }
+    public void move_infectcounter() {
+        InfectCounter ic = GameObject.Find("InfectCounter").GetComponent<InfectCounter>();
+        int count = ic.getIndex();
+        switch (count)
+        {
+            case 0:
+                break; //starts at 85,230
+            case 1:
+                ic.transform.position = new Vector3(125,230,-2.0f);
+                break;
+            case 2:
+                ic.transform.position = new Vector3(165, 230, -2.0f);
+                break;
+            case 3:
+                ic.transform.position = new Vector3(205, 230, -2.0f);
+                break;
+            case 4:
+                ic.transform.position = new Vector3(245, 230, -2.0f);
+                break;
+            case 5:
+                ic.transform.position = new Vector3(285, 230, -2.0f);
+                break;
+            case 6:
+                ic.transform.position = new Vector3(325, 230, -2.0f);
+                break;
+        }
+        
+    }
     //clean this up
     public void display_cubes(City c)
     {
@@ -841,4 +912,9 @@ public class Game : MonoBehaviour
     {
         return outbreaks;
     }
+    public int getInfectRate() { 
+        return infectrate; }
+    
+    public void setInfectRate(int i) { 
+        infectrate = i; }
 }

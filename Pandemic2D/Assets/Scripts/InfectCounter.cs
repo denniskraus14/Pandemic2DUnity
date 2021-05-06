@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class InfectCounter : MonoBehaviour
 {
-    private int count = 2;
+    private List<int> rates = new List<int>() { 2, 2, 2, 3, 3, 4, 4 };
+
+    private int index = 0;
 
     //this method would be called when epidemic cards are drawn
-    public void setCount(int c)
+    public void setIndex(int c)
     {
-        count = c;
+        index = c;
     }
 
     //this method would be called to in the infect_step() to find out how many cards to draw
-    public int getCount()
+    public int getIndex()
     {
-        return count;
+        return index;
+    }
+    public int getRate() {
+        return rates[getIndex()];
     }
 }
