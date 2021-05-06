@@ -348,6 +348,10 @@ MonoBehaviour:
     type: 3}
   disease4: {fileID: 3634647044258614953, guid: 2185ad29869c78540bdebb7bcfcc872b,
     type: 3}
+  citydeckobj: {fileID: 3224644803082377861, guid: a595bfd7f5d02954689a0b4081761c00,
+    type: 3}
+  infectdeckobj: {fileID: 8048893217450354457, guid: b0a59d1fe5e71e1428d3ff2cd5987188,
+    type: 3}
   citydeck: []
   citydeck_discard: []
   infectdeck: []

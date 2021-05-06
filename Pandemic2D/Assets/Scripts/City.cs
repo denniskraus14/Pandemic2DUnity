@@ -189,7 +189,11 @@ public class City : MonoBehaviour
         controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction() + 1);
         if (controller.GetComponent<Game>().getAction()== 4)
         {
-            controller.GetComponent<Game>().quarantine_passive(); //reset this
+            try
+            {
+                controller.GetComponent<Game>().quarantine_passive(); //reset this
+            }
+            catch { }
             controller.GetComponent<Game>().draw_two(); //draw two
             //discard to 7 and resolve epidemics (later lol)
             controller.GetComponent<Game>().infect_step();

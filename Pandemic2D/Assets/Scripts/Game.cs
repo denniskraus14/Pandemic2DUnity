@@ -19,7 +19,7 @@ public class Game : MonoBehaviour
     public List<GameObject> pawns; //replacing players dict
     public List<GameObject> diseases; //replacing diseases - make a disease class
     public Dictionary<string, City> cities = new Dictionary<string, City>(); //replacing cities
-    public GameObject initial_station, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4;
+    public GameObject initial_station, outbreak_counter, infect_counter, disease1,disease2,disease3,disease4, citydeckobj, infectdeckobj;
     public List<Card> citydeck;
     public List<Card> citydeck_discard;
     public List<Card> infectdeck;
@@ -93,6 +93,13 @@ public class Game : MonoBehaviour
         obj6.GetComponent<SpriteRenderer>().color = new Color(0.35f, 0.35f, 0.35f, 1.0f);
         obj6.name = "Black Disease";
         obj6.GetComponent<Disease>().setColor("black");
+        GameObject obj7 = Instantiate(citydeckobj, new Vector3(100,-280,-2), Quaternion.identity);
+        obj7.name = "CityDeck"; //make scale 15x15
+        obj7.transform.localScale = new Vector3(15,15,1);
+        GameObject obj8 = Instantiate(infectdeckobj, new Vector3(123,318,-2), Quaternion.identity);
+        obj8.name = "InfectDeck";
+        obj8.transform.localScale = new Vector3(15, 15, 1);
+        obj8.transform.Rotate(.867f, .025f, 90.0f);
         List<GameObject> acc = new List<GameObject>() { obj3,obj4,obj5,obj6};
         setDiseases(acc);
         InitializeDecks();//initialize decks
@@ -557,10 +564,10 @@ public class Game : MonoBehaviour
             temp2.name = "EpidemicCard";
             //do you want to instantiate them both in the discard pile?
 
-            temp.GetComponent<Card>().transform.position = new Vector3(100,-280,-3);
+            temp.GetComponent<Card>().transform.position = new Vector3(1,-280,-3);
             temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
-            resolve_epidemic();
-            resolve_epidemic();//infect is then called normally
+            epidemic();
+            epidemic();//infect is then called normally
         }
         else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic")) 
         {
@@ -578,7 +585,7 @@ public class Game : MonoBehaviour
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
             temp2.name = "EpidemicCard";
-            temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
+            temp2.GetComponent<Card>().transform.position = new Vector3(250, -280, -3);
             epidemic();       //call single epidemic func
         }
         else if (c1.getName().Equals("Epidemic") && !c2.getName().Equals("Epidemic"))
@@ -597,7 +604,7 @@ public class Game : MonoBehaviour
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
             temp2.name = "EpidemicCard";
-            temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
+            temp2.GetComponent<Card>().transform.position = new Vector3(250, -280, -3);
             //call single epidemic func
             epidemic();
         }
@@ -636,7 +643,7 @@ public class Game : MonoBehaviour
             String name = c.getName();
             String name2 = name.Replace(" ", String.Empty);
             var sprite = Resources.Load<Sprite>(name2+"EC"); //ensure all cities are spelled the same. also check caps
-            GameObject temp = Instantiate(Card, new Vector3(120.0f, 315.0f, -3), Quaternion.identity);
+            GameObject temp = Instantiate(Card, new Vector3(320.0f, 315.0f, -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite; //check if this works
             temp.name = name2 + "InfectCard";
             //how to get city color from card? link card to city?

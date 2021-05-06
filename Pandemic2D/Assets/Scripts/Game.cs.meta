@@ -20,6 +20,10 @@ MonoImporter:
       type: 3}
   - disease4: {fileID: 3634647044258614953, guid: 2185ad29869c78540bdebb7bcfcc872b,
       type: 3}
+  - citydeckobj: {fileID: 3224644803082377861, guid: a595bfd7f5d02954689a0b4081761c00,
+      type: 3}
+  - infectdeckobj: {fileID: 8048893217450354457, guid: b0a59d1fe5e71e1428d3ff2cd5987188,
+      type: 3}
   - Card: {fileID: 3361745425198513059, guid: 9ab53d18c6645f145a459ed5938b8c10, type: 3}
   - cube: {fileID: 6180049687186426045, guid: ab6af2fc45f8d364598c827ad514947d, type: 3}
   executionOrder: 0
