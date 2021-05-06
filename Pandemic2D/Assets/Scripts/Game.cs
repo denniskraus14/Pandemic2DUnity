@@ -559,7 +559,8 @@ public class Game : MonoBehaviour
 
             temp.GetComponent<Card>().transform.position = new Vector3(100,-280,-3);
             temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
-            //call the double epidemic func
+            resolve_epidemic();
+            resolve_epidemic();//infect is then called normally
         }
         else if(!c1.getName().Equals("Epidemic") && c2.getName().Equals("Epidemic"))
         {
@@ -578,8 +579,7 @@ public class Game : MonoBehaviour
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
             temp2.name = "EpidemicCard";
             temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
-            //call single epidemic func
-            epidemic();
+            epidemic();       //call single epidemic func
         }
         else if (c1.getName().Equals("Epidemic") && !c2.getName().Equals("Epidemic"))
         {
