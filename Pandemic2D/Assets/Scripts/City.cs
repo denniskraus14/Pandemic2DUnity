@@ -153,31 +153,35 @@ public class City : MonoBehaviour
     public void OnMouseUp()
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
-        GameObject obj = controller.GetComponent<Game>().getCurrentPlayer();
-        Pawn player = obj.GetComponent<Pawn>();
-        City loc = player.getLocation();
-        List<City> neis = loc.connections;
-        if (neis.Contains(this))         //make sure this city is a valid one to go to
+        InfectDeck id = GameObject.Find("InfectDeck").GetComponent<InfectDeck>();
+        if (controller.GetComponent<Game>().getAction() < 4 && id.getDrawn())
         {
-            loc.getPlayers().Remove(player);
-            player.DestroyMovePlates();//destroy the moveplates
-            //move the person
-            float x = this.getXBoard();
-            float y = this.getYBoard();
-            player.setXBoard(x);
-            player.setYBoard(y); //is this enough to move the sprite as well?
-            player.transform.position = new Vector3(player.getXBoard(),player.getYBoard(),-2.0f);
-            player.setLocation(this);
-            this.getPlayers().Add(player);
-            controller.GetComponent<Game>().Arrange(this);
-            ActionSpent();
-        }
-        else
-        {
-            player.DestroyMovePlates();//destroy the moveplates
-            //player.setXBoard(0.0f);
-            //player.setYBoard(0.0f); //this will tell you when a city move is invalid
-            //player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+            GameObject obj = controller.GetComponent<Game>().getCurrentPlayer();
+            Pawn player = obj.GetComponent<Pawn>();
+            City loc = player.getLocation();
+            List<City> neis = loc.connections;
+            if (neis.Contains(this))         //make sure this city is a valid one to go to
+            {
+                loc.getPlayers().Remove(player);
+                player.DestroyMovePlates();//destroy the moveplates
+                                           //move the person
+                float x = this.getXBoard();
+                float y = this.getYBoard();
+                player.setXBoard(x);
+                player.setYBoard(y); //is this enough to move the sprite as well?
+                player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+                player.setLocation(this);
+                this.getPlayers().Add(player);
+                controller.GetComponent<Game>().Arrange(this);
+                ActionSpent();
+            }
+            else
+            {
+                player.DestroyMovePlates();//destroy the moveplates
+                                           //player.setXBoard(0.0f);
+                                           //player.setYBoard(0.0f); //this will tell you when a city move is invalid
+                                           //player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+            }
         }
     }
 
@@ -187,21 +191,21 @@ public class City : MonoBehaviour
     {
         //increase the action counter
         controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction() + 1);
-        if (controller.GetComponent<Game>().getAction()== 4)
+        if (controller.GetComponent<Game>().getAction() == 4)
         {
             try
             {
                 controller.GetComponent<Game>().quarantine_passive(); //reset this
             }
             catch { }
-            controller.GetComponent<Game>().draw_two(); //draw two
+            //controller.GetComponent<Game>().draw_two(); //should be called on click?
             //discard to 7 and resolve epidemics (later lol)
-            controller.GetComponent<Game>().infect_step();
-            //did you lose? check outbreaks and cube counts
+            //controller.GetComponent<Game>().infect_step(); // called on click?
+            //did you lose? check outbreaks and cube counts 
             controller.GetComponent<Game>().setAction(0);            //reset the actions
-            controller.GetComponent<Game>().NextTurn();//make it the next person's turn
+            //controller.GetComponent<Game>().NextTurn();//make it the next person's turn
+            InfectDeck id = GameObject.Find("InfectDeck").GetComponent<InfectDeck>();
+            id.setDrawn(false);
         }
-        else ;//the turn just keeps going
-        
     }
 }

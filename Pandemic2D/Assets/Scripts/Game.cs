@@ -100,6 +100,7 @@ public class Game : MonoBehaviour
         obj8.name = "InfectDeck";
         obj8.transform.localScale = new Vector3(15, 15, 1);
         obj8.transform.Rotate(.867f, .025f, 90.0f);
+        obj8.GetComponent<InfectDeck>().setDrawn(true);
         List<GameObject> acc = new List<GameObject>() { obj3,obj4,obj5,obj6};
         setDiseases(acc);
         InitializeDecks();//initialize decks
