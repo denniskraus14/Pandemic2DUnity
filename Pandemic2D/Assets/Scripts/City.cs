@@ -135,13 +135,13 @@ public class City : MonoBehaviour
         Sprite c;
         switch (this.color)
         {
-            case "black":  c = Resources.Load<Sprite>("black_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
+            case "black":  c = Resources.Load<Sprite>("blue_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
                 break;
             case "blue":  c = Resources.Load<Sprite>("blue_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
                 break;
-            case "red":  c = Resources.Load<Sprite>("red_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
+            case "red":  c = Resources.Load<Sprite>("blue_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
                 break;
-            case "yellow":  c = Resources.Load<Sprite>("yellow_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
+            case "yellow":  c = Resources.Load<Sprite>("blue_city"); this.GetComponent<SpriteRenderer>().sprite = c; setCitysprite(c);
                 break;
         }
     }

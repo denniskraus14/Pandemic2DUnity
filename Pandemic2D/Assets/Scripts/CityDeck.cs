@@ -9,10 +9,13 @@ public class CityDeck : MonoBehaviour
 
     public void OnMouseUp()
     {
-        controller = GameObject.FindGameObjectWithTag("GameController");
-        //GameObject controller = GameObject.Find("GameController");
-        controller.GetComponent<Game>().draw_two();
-        setDrawn(true);
+        if (getDrawn() == false)
+        {
+            controller = GameObject.FindGameObjectWithTag("GameController");
+            //GameObject controller = GameObject.Find("GameController");
+            controller.GetComponent<Game>().draw_two();
+            setDrawn(true);
+        }
     }
 
     public void setDrawn(bool s)

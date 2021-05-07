@@ -200,14 +200,14 @@ public class Game : MonoBehaviour
             5582000,3888000, 14900000,0,0
         };
         List<Tuple<int, int>> locations = new List<Tuple<int, int>>() {
-        new Tuple<int,int>(-445,100),new Tuple<int,int>(-477,173), new Tuple<int,int>(-397,168),new Tuple<int,int>(-582,136),new Tuple<int,int>(-334,160),new Tuple<int,int>(-187,125),
+        new Tuple<int,int>(-445,100),new Tuple<int,int>(-477,171), new Tuple<int,int>(-395,168),new Tuple<int,int>(-582,136),new Tuple<int,int>(-334,160),new Tuple<int,int>(-187,125),
         new Tuple<int,int>(-177,208),new Tuple<int,int>(-97,222),new Tuple<int,int>(-114,164),new Tuple<int,int>(-60,183),new Tuple<int,int>(-3,238),new Tuple<int,int>(-360,107),
-        new Tuple<int,int>(-397,30),new Tuple<int,int>(-560,50), new Tuple<int,int>(-487,20),new Tuple<int,int>(-395,-50),new Tuple<int,int>(-290,-150),new Tuple<int,int>(-435,-140),
-        new Tuple<int,int>(-420,-220),new Tuple<int,int>(-330,-205),new Tuple<int,int>(-123,-36),new Tuple<int,int>(-69,-97),new Tuple<int,int>(-17,-20),new Tuple<int,int>(-20,-175),
+        new Tuple<int,int>(-397,32),new Tuple<int,int>(-562,50), new Tuple<int,int>(-487,20),new Tuple<int,int>(-397,-50),new Tuple<int,int>(-288,-150),new Tuple<int,int>(-435,-140),
+        new Tuple<int,int>(-420,-224),new Tuple<int,int>(-330,-207),new Tuple<int,int>(-123,-36),new Tuple<int,int>(-69,-97),new Tuple<int,int>(-17,-20),new Tuple<int,int>(-20,-175),
         new Tuple<int,int>(-100,78),new Tuple<int,int>(-17,135),new Tuple<int,int>(40,183),new Tuple<int,int>(100,147),new Tuple<int,int>(31,90),new Tuple<int,int>(40,15),
-        new Tuple<int,int>(114,70),new Tuple<int,int>(174,90),new Tuple<int,int>(117,0),new Tuple<int,int>(-33,69),new Tuple<int,int>(187,-38),new Tuple<int,int>(231,70),
-        new Tuple<int,int>(423,-222),new Tuple<int,int>(375,-60),new Tuple<int,int>(241,-105),new Tuple<int,int>(292,-60),new Tuple<int,int>(292,40),new Tuple<int,int>(240,0),
-        new Tuple<int,int>(355,53),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
+        new Tuple<int,int>(114,70),new Tuple<int,int>(174,90),new Tuple<int,int>(117,2),new Tuple<int,int>(-33,69),new Tuple<int,int>(187,-38),new Tuple<int,int>(231,70),
+        new Tuple<int,int>(423,-222),new Tuple<int,int>(375,-60),new Tuple<int,int>(239,-107),new Tuple<int,int>(292,-60),new Tuple<int,int>(292,40),new Tuple<int,int>(242,0),
+        new Tuple<int,int>(353,55),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
 
         List<string> colors = new List<string> { "blue", "yellow", "black", "red" };
         for (int i = 0; i <= 3; i++)
