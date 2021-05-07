@@ -178,9 +178,6 @@ public class City : MonoBehaviour
             else
             {
                 player.DestroyMovePlates();//destroy the moveplates
-                                           //player.setXBoard(0.0f);
-                                           //player.setYBoard(0.0f); //this will tell you when a city move is invalid
-                                           //player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
             }
         }
     }
@@ -202,7 +199,7 @@ public class City : MonoBehaviour
             //discard to 7 and resolve epidemics (later lol)
             //controller.GetComponent<Game>().infect_step(); // called on click?
             //did you lose? check outbreaks and cube counts 
-            controller.GetComponent<Game>().setAction(0);            //reset the actions
+            //controller.GetComponent<Game>().setAction(0);            //reset the actions
             //controller.GetComponent<Game>().NextTurn();//make it the next person's turn
             InfectDeck id = GameObject.Find("InfectDeck").GetComponent<InfectDeck>();
             id.setDrawn(false);

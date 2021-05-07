@@ -138,4 +138,17 @@ public class Pawn : MonoBehaviour
             nei.GetComponent<SpriteRenderer>().color = temp;
         }
     }
+    public void AllMovePlates()
+    {
+        controller = GameObject.FindGameObjectWithTag("GameController");
+        Dictionary<string,City> cities = controller.GetComponent<Game>().getCities();
+        foreach (KeyValuePair<string,City> kvp in cities)
+        {
+            City nei = kvp.Value;
+            Color temp = nei.GetComponent<SpriteRenderer>().color;
+            temp.a = 1.0f;
+            nei.GetComponent<SpriteRenderer>().color = temp;
+        }
+    }
+
 }

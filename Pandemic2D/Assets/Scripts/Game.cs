@@ -31,6 +31,7 @@ public class Game : MonoBehaviour
     private int infectrate;
     public GameObject Card;
     public GameObject cube;
+    private bool cardclicked;
 
 
     // Start is called before the first frame update
@@ -157,7 +158,6 @@ public class Game : MonoBehaviour
     public void display_cards()
     {
         int n = getPawns().Count;
-        //System.Random random = new System.Random();
         if (n == 4){
             foreach(GameObject go in getPawns())
             {
@@ -170,7 +170,7 @@ public class Game : MonoBehaviour
                     GameObject temp = Instantiate(Card, new Vector3(0, 0, -3), Quaternion.identity);
                     temp.GetComponent<SpriteRenderer>().sprite = sprite; 
                     temp.name = name2+"Card";
-                    //Thread.Sleep(1); //ensure the rng is producing diferent coordinates
+                    temp.GetComponent<Card>().setName(name);
                 }
             }
             
@@ -207,7 +207,7 @@ public class Game : MonoBehaviour
         new Tuple<int,int>(-100,78),new Tuple<int,int>(-17,135),new Tuple<int,int>(40,183),new Tuple<int,int>(100,147),new Tuple<int,int>(31,90),new Tuple<int,int>(40,15),
         new Tuple<int,int>(114,70),new Tuple<int,int>(174,90),new Tuple<int,int>(117,2),new Tuple<int,int>(-33,69),new Tuple<int,int>(187,-38),new Tuple<int,int>(231,70),
         new Tuple<int,int>(423,-222),new Tuple<int,int>(375,-60),new Tuple<int,int>(239,-107),new Tuple<int,int>(292,-60),new Tuple<int,int>(292,40),new Tuple<int,int>(242,0),
-        new Tuple<int,int>(353,55),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
+        new Tuple<int,int>(359,50),new Tuple<int,int>(415,70),new Tuple<int,int>(282,162),new Tuple<int,int>(355,160),new Tuple<int,int>(410,128),new Tuple<int,int>(286,102) };
 
         List<string> colors = new List<string> { "blue", "yellow", "black", "red" };
         for (int i = 0; i <= 3; i++)
@@ -335,7 +335,7 @@ public class Game : MonoBehaviour
         switch (n)
         {
             case 1:
-                ps[0].transform.position = new Vector3(x, y, -2.0f);
+                ps[0].transform.position = new Vector3(x+10, y, -2.0f);
                 break;
             case 2:
                 ps[0].transform.position = new Vector3(x - 20, y, -2.0f);
@@ -582,6 +582,7 @@ public class Game : MonoBehaviour
             GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite;
             temp.name = name + "Card";
+            temp.GetComponent<Card>().setName(name);
             var sprite2 = Resources.Load<Sprite>("Epidemic"); //ensure all cities are spelled the same. also check caps
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
@@ -601,6 +602,7 @@ public class Game : MonoBehaviour
             GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite;
             temp.name = name+"Card";
+            temp.GetComponent<Card>().setName(name);
             var sprite2 = Resources.Load<Sprite>("Epidemic"); //ensure all cities are spelled the same. also check caps
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
@@ -624,9 +626,12 @@ public class Game : MonoBehaviour
             GameObject temp = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp.GetComponent<SpriteRenderer>().sprite = sprite;
             temp.name = name+"Card";
+            temp.GetComponent<Card>().setName(name);
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
             temp2.name = name2+"Card";
+            temp2.GetComponent<Card>().setName(name2);
+
         }
         ArrangeCards();
     }
@@ -787,7 +792,7 @@ public class Game : MonoBehaviour
             c.getCube().GetComponent<SpriteRenderer>().sprite = null;
         }
         catch { }
-        GameObject cs = Instantiate(cube, new Vector3(c.getXBoard(), c.getYBoard() - 15, -2), Quaternion.identity);
+        GameObject cs = Instantiate(cube, new Vector3(c.getXBoard(), c.getYBoard() - 18, -3), Quaternion.identity);
         SpriteRenderer sr = cs.GetComponent<SpriteRenderer>();
         if (current == 3)
         {
@@ -819,6 +824,7 @@ public class Game : MonoBehaviour
             cs.transform.localScale = new Vector3(5, 5, 1);
         }
         c.setCube(cs);
+        cs.GetComponent<Cubes>().setLocation(c);
     }
     public void quarantine_passive() {
         GameObject go = GameObject.Find("QuarantineSpecialist");
@@ -938,4 +944,12 @@ public class Game : MonoBehaviour
     
     public void setInfectRate(int i) { 
         infectrate = i; }
+    public void setCarcdclicked(bool b)
+    {
+        cardclicked = b;
+    }
+    public void getCardclicked()
+    {
+        return cardclicked;
+    }
 }

@@ -21,6 +21,7 @@ public class InfectDeck : MonoBehaviour
             cd.setDrawn(false);
             setDrawn(true);
             controller.GetComponent<Game>().NextTurn();//make it the next person's turn
+            controller.GetComponent<Game>().setAction(0);            //reset the actions
         }
     }
     public bool getDrawn()
