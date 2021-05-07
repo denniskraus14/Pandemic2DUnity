@@ -215,7 +215,7 @@ public class Game : MonoBehaviour
             for (int j = 0; j <= 11; j++)
             {
                 Dictionary<string, int> acc = new Dictionary<string, int>();
-                acc.Add("black", 0);
+                acc.Add("black", 0); 
                 acc.Add("blue", 0);
                 acc.Add("red", 0);
                 acc.Add("yellow", 0);
