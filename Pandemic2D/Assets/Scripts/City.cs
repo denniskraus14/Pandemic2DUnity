@@ -21,6 +21,7 @@ public class City : MonoBehaviour
     private List<City> connections;
     public GameObject cube;
     public Sprite citysprite;
+    
 
     public Sprite getSprite()
     {
@@ -130,7 +131,6 @@ public class City : MonoBehaviour
     {
         controller = GameObject.FindGameObjectWithTag("GameController");
         //take the instantiated location and adjust the transform
-        SetCoords(); //everyone would start in atlanta
         this.name = name;
         Sprite c;
         switch (this.color)
@@ -146,38 +146,114 @@ public class City : MonoBehaviour
         }
     }
 
-    public void SetCoords()
-    {
-    }
-
     public void OnMouseUp()
     {
+        
         controller = GameObject.FindGameObjectWithTag("GameController");
+        bool cardclicked = controller.GetComponent<Game>().getCardclicked();
+        Card card = controller.GetComponent<Game>().getWhichcard();
         InfectDeck id = GameObject.Find("InfectDeck").GetComponent<InfectDeck>();
-        if (controller.GetComponent<Game>().getAction() < 4 && id.getDrawn())
-        {
-            GameObject obj = controller.GetComponent<Game>().getCurrentPlayer();
-            Pawn player = obj.GetComponent<Pawn>();
-            City loc = player.getLocation();
-            List<City> neis = loc.connections;
-            if (neis.Contains(this))         //make sure this city is a valid one to go to
-            {
-                loc.getPlayers().Remove(player);
-                player.DestroyMovePlates();//destroy the moveplates
-                                           //move the person
-                float x = this.getXBoard();
-                float y = this.getYBoard();
-                player.setXBoard(x);
-                player.setYBoard(y); //is this enough to move the sprite as well?
-                player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
-                player.setLocation(this);
-                this.getPlayers().Add(player);
-                controller.GetComponent<Game>().Arrange(this);
-                ActionSpent();
+        GameObject obj = controller.GetComponent<Game>().getCurrentPlayer();
+        Pawn player = obj.GetComponent<Pawn>();
+        City loc = player.getLocation();
+        if (cardclicked) {
+            if (player.hasCard(card)){
+                if (loc.getName().Equals(card.getName()))
+                {
+                    loc.getPlayers().Remove(player);
+                    player.DestroyMovePlates();
+                    float x = this.getXBoard();
+                    float y = this.getYBoard();
+                    player.setXBoard(x);
+                    player.setYBoard(y); //is this enough to move the sprite as well?
+                    player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+                    player.setLocation(this);
+                    this.getPlayers().Add(player);
+                    controller.GetComponent<Game>().Arrange(this);
+                    foreach (GameObject go in controller.GetComponent<Game>().getPawns()) {
+                        List<Card> hand = go.GetComponent<Pawn>().getCards();
+                        foreach (Card c in hand)
+                        {
+                            if (c.getName().Equals(getName()))
+                            {
+                                hand.Remove(c); //remove it from the hand
+                                go.GetComponent<Pawn>().setCards(hand);
+                                break;
+                            }
+                        }
+                    }
+                    card.transform.position = new Vector3(260, -280, -3);// discard the card, (position)
+                    card.setDiscarded(true); //set it to be discarded
+                    controller.GetComponent<Game>().setCardclicked(false);//reset cardclicked and which card
+                    controller.GetComponent<Game>().setWhichcard(null);
+                    ActionSpent();
+                }
+                else if (getName().Equals(card.getName())) {
+                    loc.getPlayers().Remove(player);
+                    player.DestroyMovePlates();
+                    float x = this.getXBoard();
+                    float y = this.getYBoard();
+                    player.setXBoard(x);
+                    player.setYBoard(y); //is this enough to move the sprite as well?
+                    player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+                    player.setLocation(this);
+                    this.getPlayers().Add(player);
+                    controller.GetComponent<Game>().Arrange(this);
+                    foreach (GameObject go in controller.GetComponent<Game>().getPawns())
+                    {
+                        List<Card> hand = go.GetComponent<Pawn>().getCards();
+                        foreach (Card c in hand)
+                        {
+                            if (c.getName().Equals(getName()))
+                            {
+                                hand.Remove(c); //remove it from the hand
+                                go.GetComponent<Pawn>().setCards(hand);
+                                break;
+                            }
+                        }
+                    }
+                    card.transform.position = new Vector3(260, -280, -3);// discard the card, (position)
+                    card.setDiscarded(true); //set it to be discarded
+                    controller.GetComponent<Game>().setCardclicked(false);//reset cardclicked and which card
+                    controller.GetComponent<Game>().setWhichcard(null);
+                    ActionSpent();
+                }
+                else {
+                    player.DestroyMovePlates();
+                    controller.GetComponent<Game>().setCardclicked(false);//reset cardclicked and which card
+                    controller.GetComponent<Game>().setWhichcard(null);
+                    OnMouseUp();//recursive?
+                }
             }
-            else
+            else { 
+                //this will only happen if the researcher's cards are clicked but not yet transferred to the current player.
+            }
+        }
+        else
+        {
+            if (controller.GetComponent<Game>().getAction() < 4 && id.getDrawn())
             {
-                player.DestroyMovePlates();//destroy the moveplates
+                
+                List<City> neis = loc.connections;
+                if (neis.Contains(this))         //make sure this city is a valid one to go to
+                {
+                    loc.getPlayers().Remove(player);
+                    player.DestroyMovePlates();//destroy the moveplates
+                                               //move the person
+                    float x = this.getXBoard();
+                    float y = this.getYBoard();
+                    player.setXBoard(x);
+                    player.setYBoard(y); //is this enough to move the sprite as well?
+                    player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+                    player.setLocation(this);
+                    this.getPlayers().Add(player);
+                    controller.GetComponent<Game>().Arrange(this);
+                    ActionSpent();
+                }
+                else
+                {
+                    player.DestroyMovePlates();//destroy the moveplates
+                }
             }
         }
     }
@@ -205,4 +281,10 @@ public class City : MonoBehaviour
             id.setDrawn(false);
         }
     }
+
+    public bool Equals(City c)
+    {
+        return this.getName().Equals(c.getName());
+    }
+    
 }

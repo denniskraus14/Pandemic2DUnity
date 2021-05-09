@@ -31,7 +31,9 @@ public class Game : MonoBehaviour
     private int infectrate;
     public GameObject Card;
     public GameObject cube;
-    private bool cardclicked;
+    private static bool cardclicked;
+    private static Card whichcard;
+
 
 
     // Start is called before the first frame update
@@ -565,8 +567,8 @@ public class Game : MonoBehaviour
             temp2.name = "EpidemicCard";
             //do you want to instantiate them both in the discard pile?
 
-            temp.GetComponent<Card>().transform.position = new Vector3(1,-280,-3);
-            temp2.GetComponent<Card>().transform.position = new Vector3(100, -280, -3);
+            temp.GetComponent<Card>().transform.position = new Vector3(260,-280,-3);
+            temp2.GetComponent<Card>().transform.position = new Vector3(260, -280, -3);
             epidemic();
             epidemic();//infect is then called normally
         }
@@ -587,7 +589,7 @@ public class Game : MonoBehaviour
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
             temp2.name = "EpidemicCard";
-            temp2.GetComponent<Card>().transform.position = new Vector3(250, -280, -3);
+            temp2.GetComponent<Card>().transform.position = new Vector3(260, -280, -3);
             epidemic();       //call single epidemic func
         }
         else if (c1.getName().Equals("Epidemic") && !c2.getName().Equals("Epidemic"))
@@ -607,7 +609,7 @@ public class Game : MonoBehaviour
             GameObject temp2 = Instantiate(Card, new Vector3(random.Next(-400, 400), random.Next(-300, 300), -3), Quaternion.identity);
             temp2.GetComponent<SpriteRenderer>().sprite = sprite2;
             temp2.name = "EpidemicCard";
-            temp2.GetComponent<Card>().transform.position = new Vector3(250, -280, -3);
+            temp2.GetComponent<Card>().transform.position = new Vector3(260, -280, -3);
             //call single epidemic func
             epidemic();
         }
@@ -944,12 +946,14 @@ public class Game : MonoBehaviour
     
     public void setInfectRate(int i) { 
         infectrate = i; }
-    public void setCarcdclicked(bool b)
+    public void setCardclicked(bool b)
     {
         cardclicked = b;
     }
-    public void getCardclicked()
+    public bool getCardclicked()
     {
         return cardclicked;
     }
+    public Card getWhichcard() { return whichcard; }
+    public void setWhichcard(Card c) { whichcard = c; }
 }

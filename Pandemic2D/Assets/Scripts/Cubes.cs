@@ -22,14 +22,16 @@ public class Cubes : MonoBehaviour
             {
                 cubes[c.getColor()] = 0; //pick them all up
                 c.setCubes(cubes);
+                c.ActionSpent();
                 controller.GetComponent<Game>().display_cubes(c); //remove sprite
             }
             else {
                 cubes[c.getColor()] = cubes[c.getColor()] - 1;//pick up 1
                 c.setCubes(cubes);
+                c.ActionSpent();
                 controller.GetComponent<Game>().display_cubes(c);//change sprite
+
             }
-            c.ActionSpent();
         }
 
     }
