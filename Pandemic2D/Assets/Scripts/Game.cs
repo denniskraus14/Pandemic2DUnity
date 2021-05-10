@@ -33,6 +33,7 @@ public class Game : MonoBehaviour
     public GameObject cube;
     private static bool cardclicked;
     private static Card whichcard;
+    private int stations = 6;
 
 
 
@@ -42,6 +43,7 @@ public class Game : MonoBehaviour
         //scene that asks for how many players
         //scene that asks to choose roles/ randomize roles
         InitializeCities();
+        Dictionary<string, City> cities = getCities();
         int n = 4; //assume 4 for now
         List<string> names = new List<string>() { "Dennis", "Dad", "Gram", "Oreo", "Dhhyey", "Zach", "Kathleen", "Eric", "Claus", "Claus's Wife" };
         List<string> roles = new List<string>() { "Dispatcher", "Medic", "Researcher", "Scientist", "QuarantineSpecialist", "ContingencyPlanner", "OperationsExpert" };
@@ -75,6 +77,8 @@ public class Game : MonoBehaviour
         //pawns[getTurn() - 1].GetComponent<Pawn>().setTurn(getTurn()-1);
         setCurrentPlayer(pawns[getTurn() - 1]);
         GameObject obj = Instantiate(initial_station, new Vector3(-445, 110, -2), Quaternion.identity); //research station
+        obj.GetComponent<ResearchStation>().setCity(cities["Atlanta"]);
+        setStations(getStations()-1);
         GameObject obj1 = Instantiate(infect_counter, new Vector3(85, 230, -2), Quaternion.identity);
         obj1.name = "InfectCounter";
         obj1.GetComponent<InfectCounter>().setIndex(0);
@@ -223,13 +227,13 @@ public class Game : MonoBehaviour
                 acc.Add("yellow", 0);
                 if (citynames[i * 12 + j].Equals("Atlanta"))
                 {
-                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
                     temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 0.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
                 else
                 {
-                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, true, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
+                    GameObject temp = CreateCity(citynames[i * 12 + j], colors[i], acc, false, false, populations[i * 12 + j], locations[i * 12 + j].Item1, locations[i * 12 + j].Item2);
                     temp.GetComponent<SpriteRenderer>().color = new Color(.067f, .341f, .035f, 1.0f); //this would make the city sprites clear/not appear
                     cities.Add(citynames[i * 12 + j], temp.GetComponent<City>());
                 }
@@ -956,4 +960,6 @@ public class Game : MonoBehaviour
     }
     public Card getWhichcard() { return whichcard; }
     public void setWhichcard(Card c) { whichcard = c; }
+    public void setStations(int i) { stations = i; }
+    public int getStations() { return stations; }
 }

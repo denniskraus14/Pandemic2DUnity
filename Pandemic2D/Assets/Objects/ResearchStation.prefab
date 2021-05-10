@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7272709962819576836}
   - component: {fileID: 7272709962819576837}
   - component: {fileID: -2208835764114942332}
+  - component: {fileID: -7347906045647931972}
   m_Layer: 0
   m_Name: ResearchStation
   m_TagString: Untagged
@@ -94,3 +95,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d62c2d6f05ff71943bd180d14c94d346, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  controller: {fileID: 0}
+  city: {fileID: 0}
+--- !u!65 &-7347906045647931972
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7272709962819576834}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5.93, y: 4.81, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}

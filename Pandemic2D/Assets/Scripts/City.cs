@@ -21,6 +21,7 @@ public class City : MonoBehaviour
     private List<City> connections;
     public GameObject cube;
     public Sprite citysprite;
+    public GameObject station;
     
 
     public Sprite getSprite()
@@ -158,18 +159,34 @@ public class City : MonoBehaviour
         City loc = player.getLocation();
         if (cardclicked) {
             if (player.hasCard(card)){
-                if (loc.getName().Equals(card.getName()))
+                if (loc.getName().Equals(card.getName())) //if the user has the card and has clicked a city, travel there EXCEPt if it is the space you are on the make a research station
                 {
-                    loc.getPlayers().Remove(player);
-                    player.DestroyMovePlates();
-                    float x = this.getXBoard();
-                    float y = this.getYBoard();
-                    player.setXBoard(x);
-                    player.setYBoard(y); //is this enough to move the sprite as well?
-                    player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
-                    player.setLocation(this);
-                    this.getPlayers().Add(player);
-                    controller.GetComponent<Game>().Arrange(this);
+                    if (card.getName().Equals(getName())){
+                        if (controller.GetComponent<Game>().getStations() > 0)
+                        { //check if you can build a research station
+                            controller.GetComponent<Game>().setStations(controller.GetComponent<Game>().getStations() - 1);
+                            GameObject go = Instantiate(station, new Vector3(getXBoard(), getYBoard(), -2), Quaternion.identity); //research station
+                            go.GetComponent<ResearchStation>().setCity(this);
+                            ActionSpent();
+                            setResearchStation(true);
+                            player.DestroyMovePlates();
+                        }
+                    }
+                    else {
+                        loc.getPlayers().Remove(player);
+                        player.DestroyMovePlates();
+                        float x = this.getXBoard();
+                        float y = this.getYBoard();
+                        player.setXBoard(x);
+                        player.setYBoard(y);
+                        player.transform.position = new Vector3(player.getXBoard(), player.getYBoard(), -2.0f);
+                        player.setLocation(this);
+                        this.getPlayers().Add(player);
+                        controller.GetComponent<Game>().Arrange(this);
+                        ActionSpent();
+                    }
+                    //this can be shortned up
+                    /*
                     foreach (GameObject go in controller.GetComponent<Game>().getPawns()) {
                         List<Card> hand = go.GetComponent<Pawn>().getCards();
                         foreach (Card c in hand)
@@ -181,12 +198,15 @@ public class City : MonoBehaviour
                                 break;
                             }
                         }
-                    }
+                    }*/
+                    List<Card> cs = player.getCards();
+                    cs.Remove(card);
+                    player.setCards(cs);
+
                     card.transform.position = new Vector3(260, -280, -3);// discard the card, (position)
                     card.setDiscarded(true); //set it to be discarded
                     controller.GetComponent<Game>().setCardclicked(false);//reset cardclicked and which card
                     controller.GetComponent<Game>().setWhichcard(null);
-                    ActionSpent();
                 }
                 else if (getName().Equals(card.getName())) {
                     loc.getPlayers().Remove(player);
@@ -199,6 +219,7 @@ public class City : MonoBehaviour
                     player.setLocation(this);
                     this.getPlayers().Add(player);
                     controller.GetComponent<Game>().Arrange(this);
+                    /*
                     foreach (GameObject go in controller.GetComponent<Game>().getPawns())
                     {
                         List<Card> hand = go.GetComponent<Pawn>().getCards();
@@ -211,7 +232,10 @@ public class City : MonoBehaviour
                                 break;
                             }
                         }
-                    }
+                    }*/
+                    List<Card> cs = player.getCards();
+                    cs.Remove(card);
+                    player.setCards(cs);
                     card.transform.position = new Vector3(260, -280, -3);// discard the card, (position)
                     card.setDiscarded(true); //set it to be discarded
                     controller.GetComponent<Game>().setCardclicked(false);//reset cardclicked and which card

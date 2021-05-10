@@ -7,6 +7,8 @@ MonoImporter:
   - controller: {instanceID: 0}
   - cube: {fileID: 6180049687186426045, guid: ab6af2fc45f8d364598c827ad514947d, type: 3}
   - citysprite: {instanceID: 0}
+  - station: {fileID: 7272709962819576834, guid: 1f933bb9c94d23f49ae30edffe37a5b4,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
