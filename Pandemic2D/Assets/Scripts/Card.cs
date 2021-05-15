@@ -15,19 +15,11 @@ public class Card : MonoBehaviour
         stored = s;
         discarded = d;
     }
-    public string getName()
-    {
-        return name;
-    }
+
+    public string getName(){return name;}
     public void setName(string s) { name = s; }
-    public bool getStored()
-    {
-        return stored;
-    }
-    public void setStored(bool s)
-    {
-        stored = s;
-    }
+    public bool getStored(){return stored;}
+    public void setStored(bool s){stored = s;}
     public bool getDiscarded() { return discarded; }
     public void setDiscarded(bool b) { discarded = b; }
 
@@ -48,22 +40,21 @@ public class Card : MonoBehaviour
             string name = getName();
             Dictionary<string, City> cities = controller.GetComponent<Game>().getCities();
             City c2;
-            try
-            {
-                c2 = cities[name];
-            }
+            try{ c2 = cities[name];}
             catch { c2 = null; }
+
             Pawn p = controller.GetComponent<Game>().getCurrentPlayer().GetComponent<Pawn>();
             p.DestroyMovePlates();
-            City c = p.getLocation();
-            Pawn other = whoseOwner();
+            City c = p.getLocation(); //the location of the current player
+            Pawn other = whoseOwner(); //is this working?
+            City otherloc = other.getLocation(); //the location of the clicked pawn
             //first check if the current player is able to interact with this card 
             // -if it is your card or
             // -if it is some other player's card of the shared space
             // -if it is the researchers cards
             bool inhand = p.hasCard(this);
-            bool researcher = other.getRole().Equals("Researcher") && other.getLocation().getName().Equals(c.getName());
-            bool samespace = other.getLocation().getName().Equals(name) && other.getLocation().getName().Equals(c.getName());
+            bool researcher = other.getRole().Equals("Researcher"); //&& other.getLocation().getName().Equals(c.getName());
+            bool samespace = otherloc.getName().Equals(name) && otherloc.getName().Equals(c.getName());
             if ((inhand || researcher || samespace) && controller.GetComponent<Game>().getAction() != 4)
             {
                 controller.GetComponent<Game>().setCardclicked(true);
@@ -97,7 +88,7 @@ public class Card : MonoBehaviour
         }
         return null; //this case should not/cannot happen
     }
-
+    
     public virtual bool Equals(Card c) {
         return c.getName().Equals(this.getName());
     }

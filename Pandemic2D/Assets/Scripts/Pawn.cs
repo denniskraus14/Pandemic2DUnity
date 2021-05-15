@@ -38,6 +38,7 @@ public class Pawn : MonoBehaviour
         return xBoard;
     }
 
+
     public float getYBoard()
     {
         return yBoard;
@@ -99,33 +100,40 @@ public class Pawn : MonoBehaviour
     }
 
     private void OnMouseUp() {
-        Card card = null;
-        Pawn p = null;
-        Pawn current = controller.GetComponent<Game>().getCurrentPlayer().GetComponent<Pawn>();
-        bool researchercard = false;
-        City loc = null;
-        City loc2 = null;
-        bool samespace = false; 
+        Card card = controller.GetComponent<Game>().getWhichcard();
+        Pawn p;
         try
         {
-            card = controller.GetComponent<Game>().getWhichcard();
             p = card.whoseOwner();
-            current = controller.GetComponent<Game>().getCurrentPlayer().GetComponent<Pawn>();
-            researchercard = p.getRole().Equals("Researcher");
-            loc = p.getLocation();
-            loc2 = this.getLocation();
-            samespace = loc.Equals(loc2);
         }
-        catch {}
+        catch { p = null; }
+        Pawn current = controller.GetComponent<Game>().getCurrentPlayer().GetComponent<Pawn>();
+        bool researchercard;
+        try{researchercard = p.getRole().Equals("Researcher");}
+        catch { researchercard = false; }
+        City loc;
+        try { loc = p.getLocation(); } catch { loc = null; }
+        City loc2;
+        try { loc2 = this.getLocation(); } catch { loc2 = null; }
+        bool samespace;
+        try { samespace = loc.getName().Equals(loc2.getName()); }
+        catch { samespace = false; }
+
+        //if the game is not over, and the current player is the one that was clicked, and you still have actions remaining
         if (!controller.GetComponent<Game>().IsGameOver() && controller.GetComponent<Game>().getCurrentPlayer().Equals(player) && controller.GetComponent<Game>().getAction() != 4)
         {
             DestroyMovePlates();  //remove previous move plates
             InitiateMovePlates(); //initiate new move plates
 
+            //if a card has been clicked prior to clicking on a pawn
             if (controller.GetComponent<Game>().getCardclicked())
             {
+                exchange_info(this);
+                /*
+                //if the current player is on the same space as the clicked pawn
                 if (samespace)      
                 {
+                    //if the user has clicked on the card of the city that the pawn that has been clicked is standing in
                     if (card.getName().Equals(loc.getName())) //the user clicked on someone else's card of that city and then clicked on themself
                     {
                         List<Card> hand = p.getCards();
@@ -134,19 +142,35 @@ public class Pawn : MonoBehaviour
                         hand2.Add(card);
                         p.setCards(hand);
                         current.setCards(hand2);//exchange it, set cards
+                        controller.GetComponent<Game>().ArrangeCards(); //change positions
                         loc.ActionSpent(); //spend action
-                        controller.GetComponent<Game>().display_cards(); //change positions
+                        controller.GetComponent<Game>().setCardclicked(false);
+                        controller.GetComponent<Game>().setWhichcard(null);
                     }
                     else if (researchercard) //the user clicked on a researcher card and then clicked on themself
-                    {             
-                        //exchange it, spend action, change positions, set cards
+                    {
+                        List<Card> hand = p.getCards();
+                        List<Card> hand2 = current.getCards();
+                        hand.Remove(card);
+                        hand2.Add(card);
+                        p.setCards(hand);
+                        current.setCards(hand2);//exchange it, set cards
+                        controller.GetComponent<Game>().ArrangeCards(); //change positions//exchange it, spend action, change positions, set cards
+                        loc.ActionSpent(); //spend action
+                        controller.GetComponent<Game>().setCardclicked(false);
+                        controller.GetComponent<Game>().setWhichcard(null);
+                    }
+                    else
+                    {
+                        controller.GetComponent<Game>().setCardclicked(false);
+                        controller.GetComponent<Game>().setWhichcard(null);
                     }
                 }
                 else
                 {
                     controller.GetComponent<Game>().setCardclicked(false);
                     controller.GetComponent<Game>().setWhichcard(null);
-                }
+                }*/
             }
             else
             {
@@ -154,17 +178,54 @@ public class Pawn : MonoBehaviour
                 controller.GetComponent<Game>().setWhichcard(null);
             }
         }
+        //otherwise, if the clicked pawn is not the current player, and there are still actions remaining and the game is not over
         else if (!controller.GetComponent<Game>().getCurrentPlayer().Equals(player) && controller.GetComponent<Game>().getAction() != 4 && !controller.GetComponent<Game>().IsGameOver())
         {
             DestroyMovePlates();
-            if (researchercard && this.Equals(current)) {
-                //exchange it, spend action, change positions, set cards
-            }//NOT clicking on a researcher card and then clicking on someone else
-            else if(true) {
-                //exchange it, spend action, change positions, set cards
-            } //the user clicked on their own card and then clicked on someone else
-            
+            exchange_info(this);
+        //if the card is a researcher's card and the user clicked on the current player's pawn
+        /*
+        if (researchercard && this.Equals(current)) {
+            List<Card> hand = p.getCards();
+            List<Card> hand2 = current.getCards();
+            hand.Remove(card);
+            hand2.Add(card);
+            p.setCards(hand);
+            current.setCards(hand2);//exchange it, set cards
+            loc.ActionSpent(); //spend action
+            controller.GetComponent<Game>().ArrangeCards(); //change positions
+            controller.GetComponent<Game>().setCardclicked(false);
+            controller.GetComponent<Game>().setWhichcard(null);*/
+        }//NOT clicking on a researcher card and then clicking on someone else
+        
+        else
+        {
+            controller.GetComponent<Game>().setCardclicked(false);
+            controller.GetComponent<Game>().setWhichcard(null);
         }
+    }
+    public void exchange_info(Pawn target)
+    {
+        controller = GameObject.FindGameObjectWithTag("GameController");
+        Pawn p = controller.GetComponent<Game>().getCurrentPlayer().GetComponent<Pawn>();
+        Card card = controller.GetComponent<Game>().getWhichcard();
+        List<GameObject> gos = controller.GetComponent<Game>().getPawns();
+        if (card != null)
+        {
+            //if the person clicked is not the current player, they must be giving
+            if (!p.getRole().Equals(target.getRole()))
+            {
+                if (p.getRole().Equals("Researcher") || p.hasCard(card))
+                {
+                    List<Card> hand = p.getCards();
+                    List<Card> hand2 = target.getCards();
+                    hand.Remove(card);
+                    hand2.Add(card);
+                    controller.GetComponent<Game>().ArrangeCards();
+                }
+            }
+        }
+        //else nothing happens, no card was clicked to exhcange
     }
 
     public void DestroyMovePlates()
@@ -216,5 +277,8 @@ public class Pawn : MonoBehaviour
         }
         return false;
     }
-
+    public bool Equals(Pawn p)
+    {
+        return p.getRole().Equals(getRole());
+    }
 }

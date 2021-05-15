@@ -185,23 +185,10 @@ public class City : MonoBehaviour
                         controller.GetComponent<Game>().Arrange(this);
                         ActionSpent();
                     }
-                    //this can be shortned up
-                    /*
-                    foreach (GameObject go in controller.GetComponent<Game>().getPawns()) {
-                        List<Card> hand = go.GetComponent<Pawn>().getCards();
-                        foreach (Card c in hand)
-                        {
-                            if (c.getName().Equals(getName()))
-                            {
-                                hand.Remove(c); //remove it from the hand
-                                go.GetComponent<Pawn>().setCards(hand);
-                                break;
-                            }
-                        }
-                    }*/
+                    
                     List<Card> cs = player.getCards();
                     cs.Remove(card);
-                    player.setCards(cs);
+                    //player.setCards(cs);
 
                     card.transform.position = new Vector3(260, -280, -3);// discard the card, (position)
                     card.setDiscarded(true); //set it to be discarded
@@ -219,23 +206,11 @@ public class City : MonoBehaviour
                     player.setLocation(this);
                     this.getPlayers().Add(player);
                     controller.GetComponent<Game>().Arrange(this);
-                    /*
-                    foreach (GameObject go in controller.GetComponent<Game>().getPawns())
-                    {
-                        List<Card> hand = go.GetComponent<Pawn>().getCards();
-                        foreach (Card c in hand)
-                        {
-                            if (c.getName().Equals(getName()))
-                            {
-                                hand.Remove(c); //remove it from the hand
-                                go.GetComponent<Pawn>().setCards(hand);
-                                break;
-                            }
-                        }
-                    }*/
+                  
                     List<Card> cs = player.getCards();
                     cs.Remove(card);
-                    player.setCards(cs);
+                    //player.setCards(cs);
+                    
                     card.transform.position = new Vector3(260, -280, -3);// discard the card, (position)
                     card.setDiscarded(true); //set it to be discarded
                     controller.GetComponent<Game>().setCardclicked(false);//reset cardclicked and which card
