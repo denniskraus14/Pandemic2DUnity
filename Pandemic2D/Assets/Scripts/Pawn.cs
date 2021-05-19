@@ -222,6 +222,7 @@ public class Pawn : MonoBehaviour
                     hand.Remove(card);
                     hand2.Add(card);
                     controller.GetComponent<Game>().ArrangeCards();
+                    new City().ActionSpent();
                 }
             }
         }

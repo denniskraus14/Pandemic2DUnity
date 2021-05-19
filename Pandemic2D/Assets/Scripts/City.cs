@@ -261,8 +261,9 @@ public class City : MonoBehaviour
     //this could be changed later to give the user more control. (when to play event cards for example)
     public void ActionSpent()
     {
-        //increase the action counter
-        controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction() + 1);
+        controller = GameObject.FindGameObjectWithTag("GameController");
+        controller.GetComponent<Game>().setAction(controller.GetComponent<Game>().getAction() + 1);        //increase the action counter
+
         if (controller.GetComponent<Game>().getAction() == 4)
         {
             try
